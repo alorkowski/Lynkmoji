@@ -29,7 +29,7 @@ class SettingsViewController: UIViewController, FUIAuthDelegate {
 
     var locationManager = CLLocationManager()
     var mapSearchResults = [MatchlessMKMapItem]()
-    var selectedMapItem: MatchlessMKMapItem? = nil
+    var selectedMapItem: MatchlessMKMapItem?
     var heldIndex: Int? = -1
     var geoFireRef: DatabaseReference?
     var geoFire: GeoFire?
@@ -47,67 +47,72 @@ class SettingsViewController: UIViewController, FUIAuthDelegate {
         locationManager.startUpdatingLocation()
         locationManager.requestWhenInUseAuthorization()
 
-//        addressText.delegate = self
-        
+        //addressText.delegate = self
+
         geoFireRef = Database.database().reference().child("users")
         geoFire = GeoFire(firebaseRef: geoFireRef!)
         cardSwiper.delegate = self
         cardSwiper.datasource = self
-        
+
         // register cardcell for storyboard use
         cardSwiper.register(nib: UINib(nibName: "LocationCell", bundle: nil),
                             forCellWithReuseIdentifier: "LocationCell")
         // You need to adopt a FUIAuthDelegate protocol to receive callback
         authUI!.delegate = self
-        
+
         let providers: [FUIAuthProvider] = [
             FUIPhoneAuth(authUI:FUIAuth.defaultAuthUI()!),
         ]
-//        self.authUI.providers = providers
+        //self.authUI.providers = providers
     }
-    
+
     private func isUserSignedIn() -> Bool {
         guard Auth.auth().currentUser != nil else { return false }
         return true
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-    
+
+        // TODO: Consider not storing user location in persistent storage
+        // swiftlint:disable:next force_cast
         let userLat = UserDefaults.standard.value(forKey: "current_latitude") as! String
+        // swiftlint:disable:next force_cast
         let userLong = UserDefaults.standard.value(forKey: "current_longitude") as! String
-        
+
         DispatchQueue.main.async {
-            let location:CLLocation = CLLocation(latitude: CLLocationDegrees(Double(userLat)!), longitude: CLLocationDegrees(Double(userLong)!))
+            // TODO: Remove force unwrap
+            let location: CLLocation = CLLocation(latitude: CLLocationDegrees(Double(userLat)!),
+                                                  longitude: CLLocationDegrees(Double(userLong)!))
             self.geoFire?.setLocation(location, forKey: Auth.auth().currentUser!.uid)
             self.searchForLocation()
         }
 
-//        self.fetchSnapUserInfo({ (userEntity, error) in
-//
-//            if let userEntity = userEntity {
-//                DispatchQueue.main.async {
-//                    self.navigationController?.setNavigationBarHidden(true, animated: true)
-//
-//                }
-//            }
-//        })
-        
-//        let phoneProvider = FUIAuth.defaultAuthUI()!.providers.first as! FUIPhoneAuth
-//        phoneProvider.signIn(withPresenting: self, phoneNumber: nil)
+        //self.fetchSnapUserInfo({ (userEntity, error) in
+        //
+        //if let userEntity = userEntity {
+        //DispatchQueue.main.async {
+        //self.navigationController?.setNavigationBarHidden(true, animated: true)
+        //
+        //}
+        //}
+        //})
+
+        //let phoneProvider = FUIAuth.defaultAuthUI()!.providers.first as! FUIPhoneAuth
+        //phoneProvider.signIn(withPresenting: self, phoneNumber: nil)
     }
-    
+
     private func showLoginView() {
         if let authVC = FUIAuth.defaultAuthUI()?.authViewController() {
             present(authVC, animated: true, completion: nil)
         }
     }
-    
+
     func authUI(_ authUI: FUIAuth, didSignInWith authDataResult: AuthDataResult?, error: Error?) {
         print("signed in")
-//        snapChatLogin()
+        //snapChatLogin()
     }
-    
+
     private func snapChatLogin() {
         SCSDKLoginClient.login(from: self, completion: { success, error in
             if let error = error {
@@ -117,44 +122,44 @@ class SettingsViewController: UIViewController, FUIAuthDelegate {
             }
             print("here")
             if success {
-                self.fetchSnapUserInfo { [weak self] (userEntity, error) in
-                    guard let _ = userEntity else { return }
+                self.fetchSnapUserInfo { [weak self] (userEntity, _) in
+                    guard userEntity != nil else { return }
                     self?.searchForLocation()
                 }
             }
         })
     }
-    
-    private func fetchSnapUserInfo(_ completion: @escaping ((UserEntity?, Error?) -> ())){
+
+    private func fetchSnapUserInfo(_ completion: @escaping ((UserEntity?, Error?) -> Void)) {
         let graphQLQuery = "{me{externalId, displayName, bitmoji{avatar}}}"
         print("fetching")
         SCSDKLoginClient
-            .fetchUserData(
-                withQuery: graphQLQuery,
-                variables: nil,
-                success: { userInfo in
-                    if let userInfo = userInfo,
-                        let data = try? JSONSerialization.data(withJSONObject: userInfo, options: .prettyPrinted),
-                        let userEntity = try? JSONDecoder().decode(UserEntity.self, from: data) {
-                        var dictionary = [String: String]()
-                        dictionary["bitmoji_url"] = userEntity.avatar
-                        dictionary["display_name"] = userEntity.displayName
-                        print("storing")
-                        self.geoFireRef?.child(Auth.auth().currentUser!.uid).child("snap_info").setValue(dictionary)
-                        completion(userEntity, nil)
-                    }
-            }) { (error, isUserLoggedOut) in
-                completion(nil, error)
-        }
+            .fetchUserData( withQuery: graphQLQuery,
+                            variables: nil,
+                            success: { userInfo in
+                                if let userInfo = userInfo,
+                                    let data = try? JSONSerialization.data(withJSONObject: userInfo, options: .prettyPrinted),
+                                    let userEntity = try? JSONDecoder().decode(UserEntity.self, from: data) {
+                                    var dictionary = [String: String]()
+                                    dictionary["bitmoji_url"] = userEntity.avatar
+                                    dictionary["display_name"] = userEntity.displayName
+                                    print("storing")
+                                    self.geoFireRef?.child(Auth.auth().currentUser!.uid).child("snap_info").setValue(dictionary)
+                                    completion(userEntity, nil)
+                                }},
+                            failure: { (error, _) in
+                                completion(nil, error)
+            }
+        )
     }
 
     @IBAction func toggledSwitch(_ sender: UISwitch) {
         if sender == showPointsOfInterest {
-//            showRouteDirections.isOn = !sender.isOn
+            //showRouteDirections.isOn = !sender.isOn
             searchResultTable.reloadData()
         } else if sender == showRouteDirections {
-//            showPointsOfInterest.isOn = !sender.isOn
-//            searchResultTable.reloadData()
+            //showPointsOfInterest.isOn = !sender.isOn
+            //searchResultTable.reloadData()
         }
     }
 
@@ -190,21 +195,18 @@ extension SettingsViewController: CLLocationManagerDelegate {
         userDefaults.set("\(newCoordinate.longitude)", forKey: "current_longitude")
         userDefaults.synchronize()
     }
-    
+
     func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         switch status {
         case .notDetermined:
             // If status has not yet been determied, ask for authorization
             manager.requestWhenInUseAuthorization()
-            break
         case .authorizedWhenInUse:
             // If authorized when in use
             manager.startUpdatingLocation()
-            break
         case .authorizedAlways:
             // If always authorized
             manager.startUpdatingLocation()
-            break
         case .restricted:
             // If restricted by e.g. parental controls. User can't enable Location Services
             break
@@ -228,7 +230,7 @@ extension SettingsViewController {
 
     func getDirections(to mapLocation: MatchlessMKMapItem) {
         refreshControl.startAnimating()
-        
+
         print("getting directions")
 
         let request = MKDirections.Request()
@@ -237,7 +239,7 @@ extension SettingsViewController {
         request.requestsAlternateRoutes = true
 
         let directions = MKDirections(request: request)
-        
+
         directions.calculate(completionHandler: { response, error in
             defer {
                 DispatchQueue.main.async { [weak self] in
@@ -268,21 +270,24 @@ extension SettingsViewController {
     /// Searches for the location that was entered into the address text
     func searchForLocation() {
         print("search")
-        myQuery = geoFire?.query(at: CLLocation(coordinate: self.locationManager.location!.coordinate, altitude: 0.5), withRadius: 1000)
+        myQuery = geoFire?.query(at: CLLocation(coordinate: self.locationManager.location!.coordinate,
+                                                altitude: 0.5),
+                                 withRadius: 1000)
 
         myQuery?.observe(.keyEntered, with: { (key, location) in
             Database.database().reference().child("users").child(key).observe(.value, with: { (snapshot) in
-                let userDict = snapshot.value as? [String : AnyObject] ?? [:]
-                //                if (userDict["active"]! as! String != "false") {
-                let snap_info = userDict["snap_info"] as! [String : AnyObject]
-                
+                let userDict = snapshot.value as? [String: AnyObject] ?? [:]
+                //if (userDict["active"]! as! String != "false") {
+                // swiftlint:disable:next force_cast
+                let snap_info = userDict["snap_info"] as! [String: AnyObject]
+                // swiftlint:disable:next force_cast
                 let destination = MatchlessMKMapItem(coordinate: location.coordinate, profileFileURL: snap_info["bitmoji_url"] as! String)
-                //                destination.name = "test"
+                //destination.name = "test"
                 self.mapSearchResults.append(destination)
                 self.cardSwiper.reloadData()
                 print("here")
             })
-            //            self.resetARScene()
+            //self.resetARScene()
         })
     }
 }
@@ -326,10 +331,10 @@ extension SettingsViewController: VerticalCardSwiperDelegate {
     }
 
     func didSwipeCardAway(card: CardCell, index: Int, swipeDirection: SwipeDirection) {
-        //        if swipeDirection == .Right {
-        //            selectedMapItem = mapSearchResults[index] as MatchlessMKMapItem
-        //            getDirections(to: selectedMapItem!)
-        //        }
+        //if swipeDirection == .Right {
+        //selectedMapItem = mapSearchResults[index] as MatchlessMKMapItem
+        //getDirections(to: selectedMapItem!)
+        //}
         mapSearchResults.remove(at: index)
     }
 
@@ -342,10 +347,10 @@ extension SettingsViewController: VerticalCardSwiperDelegate {
     }
 
     func didHoldCard(verticalCardSwiperView: VerticalCardSwiperView, index: Int, state: UIGestureRecognizer.State) {
-        //        if heldIndex != index {
-        //            heldIndex = index
-        //            selectedMapItem = mapSearchResults[index] as MatchlessMKMapItem
-        //            getDirections(to: selectedMapItem!)
-        //        }
+        //if heldIndex != index {
+        //heldIndex = index
+        //selectedMapItem = mapSearchResults[index] as MatchlessMKMapItem
+        //getDirections(to: selectedMapItem!)
+        //}
     }
 }

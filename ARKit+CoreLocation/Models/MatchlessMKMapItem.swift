@@ -10,33 +10,31 @@ import Foundation
 import MapKit
 
 open class MatchlessMKMapItem: MKMapItem {
-    
-//    var coordinate = CLLocationCoordinate2D()
+    //var coordinate = CLLocationCoordinate2D()
     var profileImage: UIImage?
-    
+
     init(coordinate: CLLocationCoordinate2D, profileFileURL: String) {
-        
+
         var place: MKPlacemark!
-        
+
         if #available(iOS 10.0, *) {
             place = MKPlacemark(coordinate: coordinate)
         } else {
             place = MKPlacemark(coordinate: coordinate, addressDictionary: nil)
         }
-        
+
         super.init(placemark: place)
-//        self.coordinate = coordinate
+        //self.coordinate = coordinate
         do {
             let url = URL(string: profileFileURL)!
             let data = try Data(contentsOf: url)
             self.profileImage = UIImage(data: data, scale: 3)
+        } catch {
+            //bitmojiImage = SCSDKBitmojiIconView().defaultImage
         }
-        catch {
-            //            bitmojiImage = SCSDKBitmojiIconView().defaultImage
-        }
-       
+
     }
-    
+
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

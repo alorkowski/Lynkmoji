@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions
         launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        
+
         FirebaseApp.configure()
 
         UIApplication.shared.isIdleTimerDisabled = true
@@ -38,8 +38,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         return true
     }
-    
-    internal func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
+
+    internal func application(_ app: UIApplication,
+                              open url: URL,
+                              options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
+        // swiftlint:disable:next force_cast
         let sourceApplication = options[UIApplication.OpenURLOptionsKey.sourceApplication] as! String?
         if FUIAuth.defaultAuthUI()?.handleOpen(url, sourceApplication: sourceApplication) ?? false {
             return true

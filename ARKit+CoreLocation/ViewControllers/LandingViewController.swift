@@ -31,15 +31,17 @@ class LandingViewController: UIViewController, ATCWalkthroughViewControllerDeleg
                             icon: "bell-icon")
     ]
 
+    // TODO: Do we have to do this every time the screen appears? Seems safer to call viewDidLoad()
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         geoFireRef = Database.database().reference().child("users")
         geoFire = GeoFire(firebaseRef: geoFireRef!)
-        if isUserSignedIn() {
-            self.fetchSnapUserInfo({ (userEntity, error) in
-                guard let _ = userEntity else { return }
+        if isUserSignedIn() { // TODO: fetchSnapUserInfo is defined and also called in SettingsViewController
+            self.fetchSnapUserInfo({ (userEntity, _) in
+                guard userEntity != nil else { return }
                 DispatchQueue.main.async {
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    // swiftlint:disable:next force_cast
                     let vc = storyboard.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
                     self.present(UINavigationController(rootViewController: vc), animated: true, completion: nil)
                 }
@@ -53,7 +55,7 @@ class LandingViewController: UIViewController, ATCWalkthroughViewControllerDeleg
         }
     }
 
-    private func fetchSnapUserInfo(_ completion: @escaping ((UserEntity?, Error?) -> ())) {
+    private func fetchSnapUserInfo(_ completion: @escaping ((UserEntity?, Error?) -> Void)) {
         let graphQLQuery = "{me{externalId, displayName, bitmoji{avatar}}}"
         print("fetching")
         SCSDKLoginClient
@@ -70,10 +72,10 @@ class LandingViewController: UIViewController, ATCWalkthroughViewControllerDeleg
                         print("storing")
                         self.geoFireRef?.child(Auth.auth().currentUser!.uid).child("snap_info").setValue(dictionary)
                         completion(userEntity, nil)
-                    }
-            }) { (error, isUserLoggedOut) in
-                completion(nil, error)
-        }
+                    }},
+                failure: { (error, _) in
+                    completion(nil, error) }
+        )
     }
 
     private func isUserSignedIn() -> Bool {
@@ -86,13 +88,17 @@ class LandingViewController: UIViewController, ATCWalkthroughViewControllerDeleg
             vc.view.removeFromSuperview()
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let appDelegate = UIApplication.shared.delegate as? AppDelegate
+            // swiftlint:disable:next force_cast
             let vc = storyboard.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
             appDelegate?.window?.rootViewController = vc
         }, completion: nil)
     }
 
     fileprivate func walkthroughVC() -> ATCWalkthroughViewController {
-        let viewControllers = walkthroughs.map { ATCClassicWalkthroughViewController(model: $0, nibName: "ATCClassicWalkthroughViewController", bundle: nil) }
+        let viewControllers = walkthroughs
+            .map { ATCClassicWalkthroughViewController(model: $0,
+                                                       nibName: "ATCClassicWalkthroughViewController",
+                                                       bundle: nil) }
         return ATCWalkthroughViewController(nibName: "ATCWalkthroughViewController",
                                             bundle: nil,
                                             viewControllers: viewControllers)

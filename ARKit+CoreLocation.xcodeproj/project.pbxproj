@@ -210,9 +210,9 @@
 			isa = PBXGroup;
 			children = (
 				FDF8A9BE22EBFCE7004C8676 /* GoogleService-Info.plist */,
+				49A3FBE91F09988100AA59C8 /* Info.plist */,
 				49A3FBE61F09988100AA59C8 /* LaunchScreen.storyboard */,
 				12318E391F3B444400ACAD16 /* Main.storyboard */,
-				49A3FBE91F09988100AA59C8 /* Info.plist */,
 			);
 			path = SupportingFiles;
 			sourceTree = "<group>";
@@ -734,7 +734,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 2AP39323FY;
-				INFOPLIST_FILE = "ARKit+CoreLocation/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/ARKit+CoreLocation/SupportingFiles/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.matchless.get;
@@ -750,7 +750,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 2AP39323FY;
-				INFOPLIST_FILE = "ARKit+CoreLocation/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/ARKit+CoreLocation/SupportingFiles/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.matchless.get;

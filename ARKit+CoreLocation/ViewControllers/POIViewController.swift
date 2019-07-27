@@ -15,11 +15,10 @@ import VerticalCardSwiper
 
 @available(iOS 11.0, *)
 /// Displays Points of Interest in ARCL
-class POIViewController: UIViewController  {
-    
+class POIViewController: UIViewController {
     @IBOutlet var mapView: MKMapView!
     @IBOutlet var infoLabel: UILabel!
-   
+
     @IBOutlet var contentView: UIView!
     let sceneLocationView = SceneLocationView()
 
@@ -33,9 +32,9 @@ class POIViewController: UIViewController  {
 
     var centerMapOnUserLocation: Bool = true
     var routes: [MKRoute]?
-    
+
     @IBOutlet weak var profileImageView: UIImageView!
-    
+
     var showMap = false {
         didSet {
             guard let mapView = mapView else {
@@ -64,24 +63,24 @@ class POIViewController: UIViewController  {
         let annotation = MKPointAnnotation()
         annotation.coordinate = memberMKMapItem!.placemark.coordinate
         self.memberAnnotation = annotation
-        
-//        updateInfoLabelTimer = Timer.scheduledTimer(timeInterval: 0.1,
-//                                                    target: self,
-//                                                    selector: #selector(POIViewController.updateInfoLabel),
-//                                                    userInfo: nil,
-//                                                    repeats: true)
+
+        //updateInfoLabelTimer = Timer.scheduledTimer(timeInterval: 0.1,
+        //target: self,
+        //selector: #selector(POIViewController.updateInfoLabel),
+        //userInfo: nil,
+        //repeats: true)
 
         // Set to true to display an arrow which points north.
         // Checkout the comments in the property description and on the readme on this.
-//        sceneLocationView.orientToTrueNorth = false
-//        sceneLocationView.locationEstimateMethod = .coreLocationDataOnly
+        //sceneLocationView.orientToTrueNorth = false
+        //sceneLocationView.locationEstimateMethod = .coreLocationDataOnly
 
         sceneLocationView.showAxesNode = false
         sceneLocationView.showFeaturePoints = displayDebugging
 
-//        sceneLocationView.delegate = self // Causes an assertionFailure - use the `arViewDelegate` instead:
+        //sceneLocationView.delegate = self // Causes an assertionFailure - use the `arViewDelegate` instead:
         sceneLocationView.arViewDelegate = self
-        
+
         contentView.addSubview(sceneLocationView)
 
         // Now add the route or location annotations as appropriate
@@ -92,7 +91,7 @@ class POIViewController: UIViewController  {
         mapView.layer.borderColor = UIColor.white.cgColor
         mapView.layer.cornerRadius = self.mapView.frame.size.width / 2
         mapView.clipsToBounds = true
-        
+
         contentView.addSubview(mapView)
         contentView.addSubview(profileImageView)
         sceneLocationView.frame = contentView.bounds
@@ -109,7 +108,7 @@ class POIViewController: UIViewController  {
 
             routes?.forEach { mapView.addOverlay($0.polyline) }
         }
-        
+
         self.profileImageView.image = self.memberMKMapItem?.profileImage
         self.profileImageView.layer.borderWidth = 2.0
         self.profileImageView.layer.masksToBounds = false
@@ -122,7 +121,7 @@ class POIViewController: UIViewController  {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
         print("run")
-//        self.infoLabel.isHidden = true
+        //self.infoLabel.isHidden = true
         sceneLocationView.run()
     }
 
@@ -160,15 +159,13 @@ class POIViewController: UIViewController  {
                 let annotationNode = LocationAnnotationNode(location: nil, image: image)
                 annotationNode.scaleRelativeToDistance = false
                 annotationNode.scalingScheme = .normal
-//                sceneLocationView.addLocationNodeForCurrentPosition(locationNode: annotationNode)
+                //sceneLocationView.addLocationNodeForCurrentPosition(locationNode: annotationNode)
             }
         }
     }
 }
 
-
 // MARK: - MKMapViewDelegate
-
 @available(iOS 11.0, *)
 extension POIViewController: MKMapViewDelegate {
 
@@ -182,7 +179,7 @@ extension POIViewController: MKMapViewDelegate {
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard !(annotation is MKUserLocation),
-           let pointAnnotation = annotation as? MKPointAnnotation else { return nil }
+            let pointAnnotation = annotation as? MKPointAnnotation else { return nil }
 
         let marker = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: nil)
 
@@ -192,8 +189,8 @@ extension POIViewController: MKMapViewDelegate {
         } else {
             marker.displayPriority = .required
             marker.markerTintColor = UIColor(hue: 0.267, saturation: 0.67, brightness: 0.77, alpha: 1.0)
-//            marker.image = self.memberMKMapItem?.profileImage
-//            marker.glyphImage = self.memberMKMapItem?.profileImage
+            //marker.image = self.memberMKMapItem?.profileImage
+            //marker.glyphImage = self.memberMKMapItem?.profileImage
         }
 
         return marker
@@ -216,48 +213,46 @@ extension POIViewController {
             }
             return
         }
-        
-        print("adding scene models")
-//        print(routes)
-//
-//        var box = SCNBox(width: 1, height: 0.2, length: 5, chamferRadius: 0.25)
-//        box.firstMaterial?.diffuse.contents = UIColor.gray.withAlphaComponent(0.5)
 
-//        buildData().forEach {
-//            sceneLocationView.addLocationNodeForCurrentPosition(locationNode: $0)
-//        }
-        
+        print("adding scene models")
+        //print(routes)
+        //
+        //var box = SCNBox(width: 1, height: 0.2, length: 5, chamferRadius: 0.25)
+        //box.firstMaterial?.diffuse.contents = UIColor.gray.withAlphaComponent(0.5)
+
+        //buildData().forEach {
+        //sceneLocationView.addLocationNodeForCurrentPosition(locationNode: $0)
+        //}
+
         // 2. If there is a route, show that
         if let routes = routes {
             sceneLocationView.addRoutes(routes: routes) { distance -> SCNBox in
                 let box = SCNBox(width: 1, height: 2.5, length: distance, chamferRadius: 1)
 
-//                // Option 1: An absolutely terrible box material set (that demonstrates what you can do):
+                //// Option 1: An absolutely terrible box material set (that demonstrates what you can do):
                 box.materials = ["box0", "box1", "box2", "box3", "box4", "box5"].map {
                     let material = SCNMaterial()
                     material.diffuse.contents = UIImage(named: $0)
                     return material
                 }
-                
+
                 // Option 2: Something more typical
                 box.firstMaterial?.diffuse.contents = UIColor.blue.withAlphaComponent(0.7)
                 return box
             }
-            
-            
         } else {
             print("building data")
             // 3. If not, then show the
-            
         }
-        
+
         // Set the scene to the view
-        let annotationNode = LocationAnnotationNode(location: self.memberMKMapItem?.placemark.location, image: self.memberMKMapItem!.profileImage!)
+        let annotationNode = LocationAnnotationNode(location: self.memberMKMapItem?.placemark.location,
+                                                    image: self.memberMKMapItem!.profileImage!)
         annotationNode.scaleRelativeToDistance = false
         annotationNode.scalingScheme = .normal
-        annotationNode.worldPosition = SCNVector3(0,0,-0.5)
+        annotationNode.worldPosition = SCNVector3(0, 0, -0.5)
         sceneLocationView.addLocationNodeWithConfirmedLocation(locationNode: annotationNode)
-//        sceneLocationView.scene = scene
+        //sceneLocationView.scene = scene
     }
 
     /// Builds the location annotations for a few random objects, scattered across the country
@@ -266,31 +261,34 @@ extension POIViewController {
     func buildDemoData() -> [LocationAnnotationNode] {
         var nodes: [LocationAnnotationNode] = []
 
-//        let spaceNeedle = buildNode(latitude: 47.6205, longitude: -122.3493, altitude: 225, imageName: "pin")
-//        nodes.append(spaceNeedle)
-//
-//        let empireStateBuilding = buildNode(latitude: 40.7484, longitude: -73.9857, altitude: 14.3, imageName: "pin")
-//        nodes.append(empireStateBuilding)
-//
-//        let canaryWharf = buildNode(latitude: 51.504607, longitude: -0.019592, altitude: 236, imageName: "pin")
-//        nodes.append(canaryWharf)
-//
-//        let applePark = buildViewNode(latitude: 37.334807, longitude: -122.009076, altitude: 100, text: "Apple Park")
-//        nodes.append(applePark)
+        //let spaceNeedle = buildNode(latitude: 47.6205, longitude: -122.3493, altitude: 225, imageName: "pin")
+        //nodes.append(spaceNeedle)
+        //
+        //let empireStateBuilding = buildNode(latitude: 40.7484, longitude: -73.9857, altitude: 14.3, imageName: "pin")
+        //nodes.append(empireStateBuilding)
+        //
+        //let canaryWharf = buildNode(latitude: 51.504607, longitude: -0.019592, altitude: 236, imageName: "pin")
+        //nodes.append(canaryWharf)
+        //
+        //let applePark = buildViewNode(latitude: 37.334807, longitude: -122.009076, altitude: 100, text: "Apple Park")
+        //nodes.append(applePark)
 
         return nodes
     }
-    
+
     func buildData() -> [LocationAnnotationNode] {
         var nodes: [LocationAnnotationNode] = []
-        
-        let member = buildNode(latitude: (self.memberMKMapItem?.placemark.coordinate.latitude)!, longitude: (self.memberMKMapItem?.placemark.coordinate.longitude)!, altitude: 225, image: self.memberMKMapItem!.profileImage!)
-        
+
+        let member = buildNode(latitude: (self.memberMKMapItem?.placemark.coordinate.latitude)!,
+                               longitude: (self.memberMKMapItem?.placemark.coordinate.longitude)!,
+                               altitude: 225,
+                               image: self.memberMKMapItem!.profileImage!)
+
         member.scaleRelativeToDistance = true
         member.scalingScheme = .normal
-        
+
         nodes.append(member)
-        
+
         return nodes
     }
 
@@ -300,10 +298,8 @@ extension POIViewController {
             return
         }
 
-        DispatchQueue.main.async { [weak self ] in
-            guard let self = self else {
-                return
-            }
+        DispatchQueue.main.async { [weak self] in
+            guard let `self` = self else { return }
 
             if self.userAnnotation == nil {
                 self.userAnnotation = MKPointAnnotation()
@@ -351,12 +347,12 @@ extension POIViewController {
             infoLabel.text!.append(" Euler x: \(eulerAngles.x.short), y: \(eulerAngles.y.short), z: \(eulerAngles.z.short)\n")
         }
 
-		if let eulerAngles = sceneLocationView.currentEulerAngles,
-			let heading = sceneLocationView.sceneLocationManager.locationManager.heading,
-			let headingAccuracy = sceneLocationView.sceneLocationManager.locationManager.headingAccuracy {
+        if let eulerAngles = sceneLocationView.currentEulerAngles,
+            let heading = sceneLocationView.sceneLocationManager.locationManager.heading,
+            let headingAccuracy = sceneLocationView.sceneLocationManager.locationManager.headingAccuracy {
             let yDegrees = (((0 - eulerAngles.y.radiansToDegrees) + 360).truncatingRemainder(dividingBy: 360) ).short
-			infoLabel.text!.append(" Heading: \(yDegrees)° • \(Float(heading).short)° • \(headingAccuracy)°\n")
-		}
+            infoLabel.text!.append(" Heading: \(yDegrees)° • \(Float(heading).short)° • \(headingAccuracy)°\n")
+        }
 
         let comp = Calendar.current.dateComponents([.hour, .minute, .second, .nanosecond], from: Date())
         if let hour = comp.hour, let minute = comp.minute, let second = comp.second, let nanosecond = comp.nanosecond {
@@ -384,7 +380,6 @@ extension POIViewController {
 }
 
 // MARK: - Helpers
-
 extension DispatchQueue {
     func asyncAfter(timeInterval: TimeInterval, execute: @escaping () -> Void) {
         self.asyncAfter(
