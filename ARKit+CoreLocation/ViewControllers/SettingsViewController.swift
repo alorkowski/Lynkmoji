@@ -18,35 +18,26 @@ import SCSDKLoginKit
 import FirebaseUI
 
 @available(iOS 11.0, *)
-class SettingsViewController: UIViewController, VerticalCardSwiperDelegate, VerticalCardSwiperDatasource, FUIAuthDelegate {
-    
+class SettingsViewController: UIViewController, FUIAuthDelegate {
     @IBOutlet weak var showMapSwitch: UISwitch!
     @IBOutlet weak var showPointsOfInterest: UISwitch!
     @IBOutlet weak var showRouteDirections: UISwitch!
     @IBOutlet weak var addressText: UITextField!
     @IBOutlet weak var searchResultTable: UITableView!
     @IBOutlet weak var refreshControl: UIActivityIndicatorView!
-    
     @IBOutlet private var cardSwiper: VerticalCardSwiper!
 
     var locationManager = CLLocationManager()
-
     var mapSearchResults = [MatchlessMKMapItem]()
-    
     var selectedMapItem: MatchlessMKMapItem? = nil
     var heldIndex: Int? = -1
-    
     var geoFireRef: DatabaseReference?
     var geoFire: GeoFire?
     var myQuery: GFQuery?
-    
     let authUI: FUIAuth? = FUIAuth.defaultAuthUI()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("loaded")
-
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         locationManager.distanceFilter = kCLDistanceFilterNone
         locationManager.headingFilter = kCLHeadingFilterNone
@@ -54,19 +45,18 @@ class SettingsViewController: UIViewController, VerticalCardSwiperDelegate, Vert
         locationManager.delegate = self
         locationManager.startUpdatingHeading()
         locationManager.startUpdatingLocation()
-
         locationManager.requestWhenInUseAuthorization()
 
 //        addressText.delegate = self
         
         geoFireRef = Database.database().reference().child("users")
         geoFire = GeoFire(firebaseRef: geoFireRef!)
-        
         cardSwiper.delegate = self
         cardSwiper.datasource = self
         
         // register cardcell for storyboard use
-        cardSwiper.register(nib: UINib(nibName: "LocationCell", bundle: nil), forCellWithReuseIdentifier: "LocationCell")
+        cardSwiper.register(nib: UINib(nibName: "LocationCell", bundle: nil),
+                            forCellWithReuseIdentifier: "LocationCell")
         // You need to adopt a FUIAuthDelegate protocol to receive callback
         authUI!.delegate = self
         
@@ -92,8 +82,7 @@ class SettingsViewController: UIViewController, VerticalCardSwiperDelegate, Vert
             self.geoFire?.setLocation(location, forKey: Auth.auth().currentUser!.uid)
             self.searchForLocation()
         }
-        
-       
+
 //        self.fetchSnapUserInfo({ (userEntity, error) in
 //
 //            if let userEntity = userEntity {
@@ -103,7 +92,6 @@ class SettingsViewController: UIViewController, VerticalCardSwiperDelegate, Vert
 //                }
 //            }
 //        })
-        
         
 //        let phoneProvider = FUIAuth.defaultAuthUI()!.providers.first as! FUIPhoneAuth
 //        phoneProvider.signIn(withPresenting: self, phoneNumber: nil)
@@ -128,13 +116,11 @@ class SettingsViewController: UIViewController, VerticalCardSwiperDelegate, Vert
                 return
             }
             print("here")
-            print("here")
             if success {
-                self.fetchSnapUserInfo({ (userEntity, error) in
-                    if let userEntity = userEntity {
-                        self.searchForLocation()
-                    }
-                })
+                self.fetchSnapUserInfo { [weak self] (userEntity, error) in
+                    guard let _ = userEntity else { return }
+                    self?.searchForLocation()
+                }
             }
         })
     }
@@ -162,8 +148,7 @@ class SettingsViewController: UIViewController, VerticalCardSwiperDelegate, Vert
         }
     }
 
-    @IBAction
-    func toggledSwitch(_ sender: UISwitch) {
+    @IBAction func toggledSwitch(_ sender: UISwitch) {
         if sender == showPointsOfInterest {
 //            showRouteDirections.isOn = !sender.isOn
             searchResultTable.reloadData()
@@ -173,48 +158,37 @@ class SettingsViewController: UIViewController, VerticalCardSwiperDelegate, Vert
         }
     }
 
-    @IBAction
-    func tappedSearch(_ sender: Any) {
-        guard let text = addressText.text, !text.isEmpty else {
-            return
-        }
+    @IBAction func tappedSearch(_ sender: Any) {
+        guard let text = addressText.text, !text.isEmpty else { return }
         searchForLocation()
     }
 }
 
 // MARK: - UITextFieldDelegate
-
 @available(iOS 11.0, *)
 extension SettingsViewController: UITextFieldDelegate {
-
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-
+    func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
+                   replacementString string: String) -> Bool {
         if string == "\n" {
             DispatchQueue.main.async { [weak self] in
                 self?.searchForLocation()
             }
         }
-
         return true
     }
-
 }
 
 // MARK: - CLLocationManagerDelegate
-
 @available(iOS 11.0, *)
 extension SettingsViewController: CLLocationManagerDelegate {
-
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let updatedLocation: CLLocation = locations.first!
-        
         let newCoordinate: CLLocationCoordinate2D = updatedLocation.coordinate
-        
-        let usrDefaults: UserDefaults = UserDefaults.standard
-        
-        usrDefaults.set("\(newCoordinate.latitude)", forKey: "current_latitude")
-        usrDefaults.set("\(newCoordinate.longitude)", forKey: "current_longitude")
-        usrDefaults.synchronize()
+        let userDefaults: UserDefaults = UserDefaults.standard
+        userDefaults.set("\(newCoordinate.latitude)", forKey: "current_latitude")
+        userDefaults.set("\(newCoordinate.longitude)", forKey: "current_longitude")
+        userDefaults.synchronize()
     }
     
     func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
@@ -244,14 +218,11 @@ extension SettingsViewController: CLLocationManagerDelegate {
 }
 
 // MARK: - Implementation
-
 @available(iOS 11.0, *)
 extension SettingsViewController {
-
     func createARVC() -> POIViewController {
         let arclVC = POIViewController.loadFromStoryboard()
-        arclVC.showMap = true//showMapSwitch.isOn
-
+        arclVC.showMap = true //showMapSwitch.isOn
         return arclVC
     }
 
@@ -314,55 +285,9 @@ extension SettingsViewController {
             //            self.resetARScene()
         })
     }
-    
-    func cardForItemAt(verticalCardSwiperView: VerticalCardSwiperView, cardForItemAt index: Int) -> CardCell {
-        
-        if let cardCell = verticalCardSwiperView.dequeueReusableCell(withReuseIdentifier: "LocationCell", for: index) as? LocationCell {
-            
-            cardCell.locationManager = locationManager
-            cardCell.mapItem = mapSearchResults[index]
-            return cardCell
-        }
-        return CardCell()
-    }
-    
-    func numberOfCards(verticalCardSwiperView: VerticalCardSwiperView) -> Int {
-        return mapSearchResults.count
-    }
-    
-    func willSwipeCardAway(card: CardCell, index: Int, swipeDirection: SwipeDirection) {
-        // called right before the card animates off the screen.
-        
-    }
-    
-    func didSwipeCardAway(card: CardCell, index: Int, swipeDirection: SwipeDirection) {
-       
-//        if swipeDirection == .Right {
-//            selectedMapItem = mapSearchResults[index] as MatchlessMKMapItem
-//            getDirections(to: selectedMapItem!)
-//        }
-        mapSearchResults.remove(at: index)
-    }
-    
-    func didTapCard(verticalCardSwiperView: VerticalCardSwiperView, index: Int) {
-        if heldIndex != index {
-            heldIndex = index
-            selectedMapItem = mapSearchResults[index] as MatchlessMKMapItem
-            getDirections(to: selectedMapItem!)
-        }
-    }
-    
-    func didHoldCard(verticalCardSwiperView: VerticalCardSwiperView, index: Int, state: UIGestureRecognizer.State) {
-//        if heldIndex != index {
-//            heldIndex = index
-//            selectedMapItem = mapSearchResults[index] as MatchlessMKMapItem
-//            getDirections(to: selectedMapItem!)
-//        }
-    }
 }
 
 extension MKLocalSearch.Response {
-
     func sortedMapItems(byDistanceFrom location: CLLocation?) -> [MKMapItem] {
         guard let location = location else {
             return mapItems
@@ -373,8 +298,54 @@ extension MKLocalSearch.Response {
                 let d2 = second.placemark.location?.distance(from: location) else {
                     return true
             }
-
             return d1 < d2
         }
+    }
+}
+
+extension SettingsViewController: VerticalCardSwiperDatasource {
+    func cardForItemAt(verticalCardSwiperView: VerticalCardSwiperView,
+                       cardForItemAt index: Int) -> CardCell {
+        if let cardCell = verticalCardSwiperView.dequeueReusableCell(withReuseIdentifier: "LocationCell",
+                                                                     for: index) as? LocationCell {
+            cardCell.locationManager = locationManager
+            cardCell.mapItem = mapSearchResults[index]
+            return cardCell
+        }
+        return CardCell()
+    }
+
+    func numberOfCards(verticalCardSwiperView: VerticalCardSwiperView) -> Int {
+        return mapSearchResults.count
+    }
+}
+
+extension SettingsViewController: VerticalCardSwiperDelegate {
+    func willSwipeCardAway(card: CardCell, index: Int, swipeDirection: SwipeDirection) {
+        // called right before the card animates off the screen.
+    }
+
+    func didSwipeCardAway(card: CardCell, index: Int, swipeDirection: SwipeDirection) {
+        //        if swipeDirection == .Right {
+        //            selectedMapItem = mapSearchResults[index] as MatchlessMKMapItem
+        //            getDirections(to: selectedMapItem!)
+        //        }
+        mapSearchResults.remove(at: index)
+    }
+
+    func didTapCard(verticalCardSwiperView: VerticalCardSwiperView, index: Int) {
+        if heldIndex != index {
+            heldIndex = index
+            selectedMapItem = mapSearchResults[index] as MatchlessMKMapItem
+            getDirections(to: selectedMapItem!)
+        }
+    }
+
+    func didHoldCard(verticalCardSwiperView: VerticalCardSwiperView, index: Int, state: UIGestureRecognizer.State) {
+        //        if heldIndex != index {
+        //            heldIndex = index
+        //            selectedMapItem = mapSearchResults[index] as MatchlessMKMapItem
+        //            getDirections(to: selectedMapItem!)
+        //        }
     }
 }
