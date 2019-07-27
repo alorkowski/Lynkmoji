@@ -158,32 +158,63 @@
 		49A3FBDA1F09988100AA59C8 /* ARKit+CoreLocation */ = {
 			isa = PBXGroup;
 			children = (
-				FDF8A9BE22EBFCE7004C8676 /* GoogleService-Info.plist */,
-				FDDB35C922CFB251009490A7 /* Helpers */,
 				49A3FBDB1F09988100AA59C8 /* AppDelegate.swift */,
 				12318E3C1F3B457200ACAD16 /* Utils.swift */,
+				49A3FBE41F09988100AA59C8 /* Assets.xcassets */,
+				7308209122ECE54B005B3504 /* Cells */,
+				FDDB35C922CFB251009490A7 /* Helpers */,
+				7308209322ECE5CF005B3504 /* Models */,
+				7308209422ECE5E2005B3504 /* SupportingFiles */,
+				7308209222ECE5A1005B3504 /* ViewControllers */,
+			);
+			path = "ARKit+CoreLocation";
+			sourceTree = "<group>";
+		};
+		7308209122ECE54B005B3504 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				3643DAEC221E3390002BEAFC /* OpenARCell.swift */,
+				3643DAEE221E3840002BEAFC /* LocationCell.swift */,
+				FD40868C22CE78B2000E6F90 /* LocationCell.xib */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		7308209222ECE5A1005B3504 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
 				49A3FBDF1F09988100AA59C8 /* POIViewController.swift */,
 				36B3F34A221D077700745096 /* SettingsViewController.swift */,
 				D8C205D01F5B197200675E6E /* NotSupportedViewController.swift */,
+				36D99E3122BFEA2E00D09952 /* POIViewController+ARSCNViewDelegate.swift */,
+				FDDB35BD22CFAE44009490A7 /* LandingViewController.swift */,
+				FDDB35BF22CFB0CE009490A7 /* ATCClassicWalkthroughViewController.swift */,
+				FDDB35C322CFB153009490A7 /* ATCClassicWalkthroughViewController.xib */,
+				FDDB35C522CFB192009490A7 /* ATCWalkthroughViewController.swift */,
+				FDDB35D022CFB3D4009490A7 /* ATCWalkthroughViewController.xib */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		7308209322ECE5CF005B3504 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FDDB35C122CFB123009490A7 /* ATCWalkthroughModel.swift */,
+				FD40866922CBF6F1000E6F90 /* MatchlessMKMapItem.swift */,
+				FDDB35C722CFB1F4009490A7 /* UserEntity.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		7308209422ECE5E2005B3504 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				FDF8A9BE22EBFCE7004C8676 /* GoogleService-Info.plist */,
 				49A3FBE61F09988100AA59C8 /* LaunchScreen.storyboard */,
 				12318E391F3B444400ACAD16 /* Main.storyboard */,
 				49A3FBE91F09988100AA59C8 /* Info.plist */,
-				3643DAEA221E30C6002BEAFC /* UIButton+Designable.swift */,
-				3643DAEC221E3390002BEAFC /* OpenARCell.swift */,
-				3643DAEE221E3840002BEAFC /* LocationCell.swift */,
-				36D99E3122BFEA2E00D09952 /* POIViewController+ARSCNViewDelegate.swift */,
-				FD40866922CBF6F1000E6F90 /* MatchlessMKMapItem.swift */,
-				FD40868C22CE78B2000E6F90 /* LocationCell.xib */,
-				FDDB35BD22CFAE44009490A7 /* LandingViewController.swift */,
-				FDDB35BF22CFB0CE009490A7 /* ATCClassicWalkthroughViewController.swift */,
-				FDDB35C122CFB123009490A7 /* ATCWalkthroughModel.swift */,
-				FDDB35C322CFB153009490A7 /* ATCClassicWalkthroughViewController.xib */,
-				FDDB35C522CFB192009490A7 /* ATCWalkthroughViewController.swift */,
-				FDDB35C722CFB1F4009490A7 /* UserEntity.swift */,
-				FDDB35D022CFB3D4009490A7 /* ATCWalkthroughViewController.xib */,
-				49A3FBE41F09988100AA59C8 /* Assets.xcassets */,
 			);
-			path = "ARKit+CoreLocation";
+			path = SupportingFiles;
 			sourceTree = "<group>";
 		};
 		932EF23020BE7E6E0052210C /* ARCLTests */ = {
@@ -210,6 +241,7 @@
 				FDDB35CA22CFB251009490A7 /* UIColor.swift */,
 				FDDB35CB22CFB251009490A7 /* UIImage.swift */,
 				FDDB35CC22CFB251009490A7 /* UIViewController.swift */,
+				3643DAEA221E30C6002BEAFC /* UIButton+Designable.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
