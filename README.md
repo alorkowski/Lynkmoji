@@ -1,0 +1,2 @@
+# Lynkmoji
+Let's Lynk!
