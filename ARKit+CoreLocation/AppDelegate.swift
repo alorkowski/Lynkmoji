@@ -6,7 +6,10 @@
 //  Copyright © 2017 Project Dent. All rights reserved.
 //
 
+import Firebase
+import FirebaseUI
 import UIKit
+import SCSDKLoginKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,6 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions
         launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        
+        FirebaseApp.configure()
 
         UIApplication.shared.isIdleTimerDisabled = true
 
@@ -32,5 +37,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         return true
+    }
+    
+    internal func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
+        let sourceApplication = options[UIApplication.OpenURLOptionsKey.sourceApplication] as! String?
+        if FUIAuth.defaultAuthUI()?.handleOpen(url, sourceApplication: sourceApplication) ?? false {
+            return true
+        } else {
+            return SCSDKLoginClient.application(app, open: url, options: options)
+        }
+        // other URL handling goes here.
+        return false
     }
 }

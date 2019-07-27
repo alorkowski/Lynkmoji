@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>763241707529-glcmuldlar3k19d4m3m614ho5omv0asp.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.763241707529-glcmuldlar3k19d4m3m614ho5omv0asp</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCiKfvN9tKQdKYPi0fvUwcI2M8XYk3YYA0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>763241707529</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>co.matchless.get</string>
+	<key>PROJECT_ID</key>
+	<string>matchless-1556675817078</string>
+	<key>STORAGE_BUCKET</key>
+	<string>matchless-1556675817078.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:763241707529:ios:4c73af857da79951</string>
+	<key>DATABASE_URL</key>
+	<string>https://matchless-1556675817078.firebaseio.com</string>
+</dict>
+</plist>

@@ -11,25 +11,31 @@ import ARKit
 import MapKit
 import SceneKit
 import UIKit
+import VerticalCardSwiper
 
 @available(iOS 11.0, *)
 /// Displays Points of Interest in ARCL
-class POIViewController: UIViewController {
+class POIViewController: UIViewController  {
+    
     @IBOutlet var mapView: MKMapView!
     @IBOutlet var infoLabel: UILabel!
-
+   
     @IBOutlet var contentView: UIView!
     let sceneLocationView = SceneLocationView()
 
     var userAnnotation: MKPointAnnotation?
     var locationEstimateAnnotation: MKPointAnnotation?
+    var memberAnnotation: MKPointAnnotation?
+    var memberMKMapItem: MatchlessMKMapItem?
 
     var updateUserLocationTimer: Timer?
     var updateInfoLabelTimer: Timer?
 
     var centerMapOnUserLocation: Bool = true
     var routes: [MKRoute]?
-
+    
+    @IBOutlet weak var profileImageView: UIImageView!
+    
     var showMap = false {
         didSet {
             guard let mapView = mapView else {
@@ -55,27 +61,40 @@ class POIViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        updateInfoLabelTimer = Timer.scheduledTimer(timeInterval: 0.1,
-                                                    target: self,
-                                                    selector: #selector(POIViewController.updateInfoLabel),
-                                                    userInfo: nil,
-                                                    repeats: true)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = memberMKMapItem!.placemark.coordinate
+        self.memberAnnotation = annotation
+        
+//        updateInfoLabelTimer = Timer.scheduledTimer(timeInterval: 0.1,
+//                                                    target: self,
+//                                                    selector: #selector(POIViewController.updateInfoLabel),
+//                                                    userInfo: nil,
+//                                                    repeats: true)
 
         // Set to true to display an arrow which points north.
         // Checkout the comments in the property description and on the readme on this.
 //        sceneLocationView.orientToTrueNorth = false
 //        sceneLocationView.locationEstimateMethod = .coreLocationDataOnly
 
-        sceneLocationView.showAxesNode = true
+        sceneLocationView.showAxesNode = false
         sceneLocationView.showFeaturePoints = displayDebugging
 
 //        sceneLocationView.delegate = self // Causes an assertionFailure - use the `arViewDelegate` instead:
         sceneLocationView.arViewDelegate = self
+        
+        contentView.addSubview(sceneLocationView)
 
         // Now add the route or location annotations as appropriate
         addSceneModels()
 
-        contentView.addSubview(sceneLocationView)
+        mapView.layer.borderWidth = 0.5
+        mapView.layer.masksToBounds = true
+        mapView.layer.borderColor = UIColor.white.cgColor
+        mapView.layer.cornerRadius = self.mapView.frame.size.width / 2
+        mapView.clipsToBounds = true
+        
+        contentView.addSubview(mapView)
+        contentView.addSubview(profileImageView)
         sceneLocationView.frame = contentView.bounds
 
         mapView.isHidden = !showMap
@@ -90,12 +109,20 @@ class POIViewController: UIViewController {
 
             routes?.forEach { mapView.addOverlay($0.polyline) }
         }
+        
+        self.profileImageView.image = self.memberMKMapItem?.profileImage
+        self.profileImageView.layer.borderWidth = 2.0
+        self.profileImageView.layer.masksToBounds = false
+        self.profileImageView.layer.borderColor = UIColor.white.cgColor
+        self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2
+        self.profileImageView.clipsToBounds = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
         print("run")
+//        self.infoLabel.isHidden = true
         sceneLocationView.run()
     }
 
@@ -133,11 +160,12 @@ class POIViewController: UIViewController {
                 let annotationNode = LocationAnnotationNode(location: nil, image: image)
                 annotationNode.scaleRelativeToDistance = false
                 annotationNode.scalingScheme = .normal
-                sceneLocationView.addLocationNodeForCurrentPosition(locationNode: annotationNode)
+//                sceneLocationView.addLocationNodeForCurrentPosition(locationNode: annotationNode)
             }
         }
     }
 }
+
 
 // MARK: - MKMapViewDelegate
 
@@ -164,7 +192,8 @@ extension POIViewController: MKMapViewDelegate {
         } else {
             marker.displayPriority = .required
             marker.markerTintColor = UIColor(hue: 0.267, saturation: 0.67, brightness: 0.77, alpha: 1.0)
-            marker.glyphImage = UIImage(named: "compass")
+//            marker.image = self.memberMKMapItem?.profileImage
+//            marker.glyphImage = self.memberMKMapItem?.profileImage
         }
 
         return marker
@@ -187,32 +216,48 @@ extension POIViewController {
             }
             return
         }
+        
+        print("adding scene models")
+//        print(routes)
+//
+//        var box = SCNBox(width: 1, height: 0.2, length: 5, chamferRadius: 0.25)
+//        box.firstMaterial?.diffuse.contents = UIColor.gray.withAlphaComponent(0.5)
 
-        let box = SCNBox(width: 1, height: 0.2, length: 5, chamferRadius: 0.25)
-        box.firstMaterial?.diffuse.contents = UIColor.gray.withAlphaComponent(0.5)
-
+//        buildData().forEach {
+//            sceneLocationView.addLocationNodeForCurrentPosition(locationNode: $0)
+//        }
+        
         // 2. If there is a route, show that
         if let routes = routes {
             sceneLocationView.addRoutes(routes: routes) { distance -> SCNBox in
-                let box = SCNBox(width: 1.75, height: 0.5, length: distance, chamferRadius: 0.25)
+                let box = SCNBox(width: 1, height: 2.5, length: distance, chamferRadius: 1)
 
 //                // Option 1: An absolutely terrible box material set (that demonstrates what you can do):
-//                box.materials = ["box0", "box1", "box2", "box3", "box4", "box5"].map {
-//                    let material = SCNMaterial()
-//                    material.diffuse.contents = UIImage(named: $0)
-//                    return material
-//                }
-
+                box.materials = ["box0", "box1", "box2", "box3", "box4", "box5"].map {
+                    let material = SCNMaterial()
+                    material.diffuse.contents = UIImage(named: $0)
+                    return material
+                }
+                
                 // Option 2: Something more typical
                 box.firstMaterial?.diffuse.contents = UIColor.blue.withAlphaComponent(0.7)
                 return box
             }
+            
+            
         } else {
+            print("building data")
             // 3. If not, then show the
-            buildDemoData().forEach {
-                sceneLocationView.addLocationNodeWithConfirmedLocation(locationNode: $0)
-            }
+            
         }
+        
+        // Set the scene to the view
+        let annotationNode = LocationAnnotationNode(location: self.memberMKMapItem?.placemark.location, image: self.memberMKMapItem!.profileImage!)
+        annotationNode.scaleRelativeToDistance = false
+        annotationNode.scalingScheme = .normal
+        annotationNode.worldPosition = SCNVector3(0,0,-0.5)
+        sceneLocationView.addLocationNodeWithConfirmedLocation(locationNode: annotationNode)
+//        sceneLocationView.scene = scene
     }
 
     /// Builds the location annotations for a few random objects, scattered across the country
@@ -221,18 +266,31 @@ extension POIViewController {
     func buildDemoData() -> [LocationAnnotationNode] {
         var nodes: [LocationAnnotationNode] = []
 
-        let spaceNeedle = buildNode(latitude: 47.6205, longitude: -122.3493, altitude: 225, imageName: "pin")
-        nodes.append(spaceNeedle)
+//        let spaceNeedle = buildNode(latitude: 47.6205, longitude: -122.3493, altitude: 225, imageName: "pin")
+//        nodes.append(spaceNeedle)
+//
+//        let empireStateBuilding = buildNode(latitude: 40.7484, longitude: -73.9857, altitude: 14.3, imageName: "pin")
+//        nodes.append(empireStateBuilding)
+//
+//        let canaryWharf = buildNode(latitude: 51.504607, longitude: -0.019592, altitude: 236, imageName: "pin")
+//        nodes.append(canaryWharf)
+//
+//        let applePark = buildViewNode(latitude: 37.334807, longitude: -122.009076, altitude: 100, text: "Apple Park")
+//        nodes.append(applePark)
 
-        let empireStateBuilding = buildNode(latitude: 40.7484, longitude: -73.9857, altitude: 14.3, imageName: "pin")
-        nodes.append(empireStateBuilding)
-
-        let canaryWharf = buildNode(latitude: 51.504607, longitude: -0.019592, altitude: 236, imageName: "pin")
-        nodes.append(canaryWharf)
-
-        let applePark = buildViewNode(latitude: 37.334807, longitude: -122.009076, altitude: 100, text: "Apple Park")
-        nodes.append(applePark)
-
+        return nodes
+    }
+    
+    func buildData() -> [LocationAnnotationNode] {
+        var nodes: [LocationAnnotationNode] = []
+        
+        let member = buildNode(latitude: (self.memberMKMapItem?.placemark.coordinate.latitude)!, longitude: (self.memberMKMapItem?.placemark.coordinate.longitude)!, altitude: 225, image: self.memberMKMapItem!.profileImage!)
+        
+        member.scaleRelativeToDistance = true
+        member.scalingScheme = .normal
+        
+        nodes.append(member)
+        
         return nodes
     }
 
@@ -250,6 +308,7 @@ extension POIViewController {
             if self.userAnnotation == nil {
                 self.userAnnotation = MKPointAnnotation()
                 self.mapView.addAnnotation(self.userAnnotation!)
+                self.mapView.addAnnotation(self.memberAnnotation!)
             }
 
             UIView.animate(withDuration: 0.5, delay: 0, options: .allowUserInteraction, animations: {
@@ -263,7 +322,7 @@ extension POIViewController {
                                animations: {
                                 self.mapView.setCenter(self.userAnnotation!.coordinate, animated: false)
                 }, completion: { _ in
-                    self.mapView.region.span = MKCoordinateSpan(latitudeDelta: 0.0005, longitudeDelta: 0.0005)
+                    self.mapView.region.span = MKCoordinateSpan(latitudeDelta: 0.0055, longitudeDelta: 0.0055)
                 })
             }
 
@@ -306,10 +365,9 @@ extension POIViewController {
     }
 
     func buildNode(latitude: CLLocationDegrees, longitude: CLLocationDegrees,
-                   altitude: CLLocationDistance, imageName: String) -> LocationAnnotationNode {
+                   altitude: CLLocationDistance, image: UIImage) -> LocationAnnotationNode {
         let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         let location = CLLocation(coordinate: coordinate, altitude: altitude)
-        let image = UIImage(named: imageName)!
         return LocationAnnotationNode(location: location, image: image)
     }
 

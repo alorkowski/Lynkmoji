@@ -22,6 +22,19 @@
 		49A3FBE81F09988100AA59C8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49A3FBE61F09988100AA59C8 /* LaunchScreen.storyboard */; };
 		580A603392EEF4589D68F428 /* Pods_ARKit_CoreLocation_ARCLTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE4378FAA43D764F4F6D0513 /* Pods_ARKit_CoreLocation_ARCLTests.framework */; };
 		932EF23220BE7E6E0052210C /* ARCLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932EF23120BE7E6E0052210C /* ARCLTests.swift */; };
+		FD40866A22CBF6F1000E6F90 /* MatchlessMKMapItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD40866922CBF6F1000E6F90 /* MatchlessMKMapItem.swift */; };
+		FD40868D22CE78B2000E6F90 /* LocationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD40868C22CE78B2000E6F90 /* LocationCell.xib */; };
+		FDDB35BE22CFAE44009490A7 /* LandingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDB35BD22CFAE44009490A7 /* LandingViewController.swift */; };
+		FDDB35C022CFB0CE009490A7 /* ATCClassicWalkthroughViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDB35BF22CFB0CE009490A7 /* ATCClassicWalkthroughViewController.swift */; };
+		FDDB35C222CFB123009490A7 /* ATCWalkthroughModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDB35C122CFB123009490A7 /* ATCWalkthroughModel.swift */; };
+		FDDB35C422CFB153009490A7 /* ATCClassicWalkthroughViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FDDB35C322CFB153009490A7 /* ATCClassicWalkthroughViewController.xib */; };
+		FDDB35C622CFB192009490A7 /* ATCWalkthroughViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDB35C522CFB192009490A7 /* ATCWalkthroughViewController.swift */; };
+		FDDB35C822CFB1F4009490A7 /* UserEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDB35C722CFB1F4009490A7 /* UserEntity.swift */; };
+		FDDB35CD22CFB251009490A7 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDB35CA22CFB251009490A7 /* UIColor.swift */; };
+		FDDB35CE22CFB251009490A7 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDB35CB22CFB251009490A7 /* UIImage.swift */; };
+		FDDB35CF22CFB251009490A7 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDB35CC22CFB251009490A7 /* UIViewController.swift */; };
+		FDDB35D122CFB3D4009490A7 /* ATCWalkthroughViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FDDB35D022CFB3D4009490A7 /* ATCWalkthroughViewController.xib */; };
+		FDF8A9BF22EBFCE7004C8676 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FDF8A9BE22EBFCE7004C8676 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +76,19 @@
 		AE4378FAA43D764F4F6D0513 /* Pods_ARKit_CoreLocation_ARCLTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARKit_CoreLocation_ARCLTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CED01C5C93D16CD7C03711E5 /* Pods-ARKit+CoreLocation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARKit+CoreLocation.release.xcconfig"; path = "Pods/Target Support Files/Pods-ARKit+CoreLocation/Pods-ARKit+CoreLocation.release.xcconfig"; sourceTree = "<group>"; };
 		D8C205D01F5B197200675E6E /* NotSupportedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotSupportedViewController.swift; sourceTree = "<group>"; };
+		FD40866922CBF6F1000E6F90 /* MatchlessMKMapItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchlessMKMapItem.swift; sourceTree = "<group>"; };
+		FD40868C22CE78B2000E6F90 /* LocationCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LocationCell.xib; sourceTree = "<group>"; };
+		FDDB35BD22CFAE44009490A7 /* LandingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingViewController.swift; sourceTree = "<group>"; };
+		FDDB35BF22CFB0CE009490A7 /* ATCClassicWalkthroughViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ATCClassicWalkthroughViewController.swift; sourceTree = "<group>"; };
+		FDDB35C122CFB123009490A7 /* ATCWalkthroughModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ATCWalkthroughModel.swift; sourceTree = "<group>"; };
+		FDDB35C322CFB153009490A7 /* ATCClassicWalkthroughViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ATCClassicWalkthroughViewController.xib; sourceTree = "<group>"; };
+		FDDB35C522CFB192009490A7 /* ATCWalkthroughViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ATCWalkthroughViewController.swift; sourceTree = "<group>"; };
+		FDDB35C722CFB1F4009490A7 /* UserEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEntity.swift; sourceTree = "<group>"; };
+		FDDB35CA22CFB251009490A7 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		FDDB35CB22CFB251009490A7 /* UIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		FDDB35CC22CFB251009490A7 /* UIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
+		FDDB35D022CFB3D4009490A7 /* ATCWalkthroughViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ATCWalkthroughViewController.xib; sourceTree = "<group>"; };
+		FDF8A9BE22EBFCE7004C8676 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,19 +158,30 @@
 		49A3FBDA1F09988100AA59C8 /* ARKit+CoreLocation */ = {
 			isa = PBXGroup;
 			children = (
+				FDF8A9BE22EBFCE7004C8676 /* GoogleService-Info.plist */,
+				FDDB35C922CFB251009490A7 /* Helpers */,
 				49A3FBDB1F09988100AA59C8 /* AppDelegate.swift */,
 				12318E3C1F3B457200ACAD16 /* Utils.swift */,
 				49A3FBDF1F09988100AA59C8 /* POIViewController.swift */,
+				36B3F34A221D077700745096 /* SettingsViewController.swift */,
 				D8C205D01F5B197200675E6E /* NotSupportedViewController.swift */,
-				49A3FBE41F09988100AA59C8 /* Assets.xcassets */,
 				49A3FBE61F09988100AA59C8 /* LaunchScreen.storyboard */,
 				12318E391F3B444400ACAD16 /* Main.storyboard */,
 				49A3FBE91F09988100AA59C8 /* Info.plist */,
-				36B3F34A221D077700745096 /* SettingsViewController.swift */,
 				3643DAEA221E30C6002BEAFC /* UIButton+Designable.swift */,
 				3643DAEC221E3390002BEAFC /* OpenARCell.swift */,
 				3643DAEE221E3840002BEAFC /* LocationCell.swift */,
 				36D99E3122BFEA2E00D09952 /* POIViewController+ARSCNViewDelegate.swift */,
+				FD40866922CBF6F1000E6F90 /* MatchlessMKMapItem.swift */,
+				FD40868C22CE78B2000E6F90 /* LocationCell.xib */,
+				FDDB35BD22CFAE44009490A7 /* LandingViewController.swift */,
+				FDDB35BF22CFB0CE009490A7 /* ATCClassicWalkthroughViewController.swift */,
+				FDDB35C122CFB123009490A7 /* ATCWalkthroughModel.swift */,
+				FDDB35C322CFB153009490A7 /* ATCClassicWalkthroughViewController.xib */,
+				FDDB35C522CFB192009490A7 /* ATCWalkthroughViewController.swift */,
+				FDDB35C722CFB1F4009490A7 /* UserEntity.swift */,
+				FDDB35D022CFB3D4009490A7 /* ATCWalkthroughViewController.xib */,
+				49A3FBE41F09988100AA59C8 /* Assets.xcassets */,
 			);
 			path = "ARKit+CoreLocation";
 			sourceTree = "<group>";
@@ -167,6 +204,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		FDDB35C922CFB251009490A7 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				FDDB35CA22CFB251009490A7 /* UIColor.swift */,
+				FDDB35CB22CFB251009490A7 /* UIImage.swift */,
+				FDDB35CC22CFB251009490A7 /* UIViewController.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -180,6 +227,7 @@
 				49A3FBD61F09988100AA59C8 /* Resources */,
 				128F729F1F39B73C00AC6E4C /* SwiftLint */,
 				9CE3F8FA71585F7964C43538 /* [CP] Embed Pods Frameworks */,
+				7A274CD3C0FABE821BD4C6A5 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -199,6 +247,7 @@
 				932EF22720BE7E6E0052210C /* Frameworks */,
 				932EF22820BE7E6E0052210C /* Resources */,
 				C224D3A38F464259B5D8D1FC /* [CP] Embed Pods Frameworks */,
+				BD2DE1FEF5D4F773E04939D5 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -257,7 +306,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				12318E3B1F3B444400ACAD16 /* Main.storyboard in Resources */,
+				FDF8A9BF22EBFCE7004C8676 /* GoogleService-Info.plist in Resources */,
+				FDDB35D122CFB3D4009490A7 /* ATCWalkthroughViewController.xib in Resources */,
+				FDDB35C422CFB153009490A7 /* ATCClassicWalkthroughViewController.xib in Resources */,
 				49A3FBE81F09988100AA59C8 /* LaunchScreen.storyboard in Resources */,
+				FD40868D22CE78B2000E6F90 /* LocationCell.xib in Resources */,
 				49A3FBE51F09988100AA59C8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -308,6 +361,30 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		7A274CD3C0FABE821BD4C6A5 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ARKit+CoreLocation/Pods-ARKit+CoreLocation-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseAuthUI.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebasePhoneAuthUI.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebaseAuthUI.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebasePhoneAuthUI.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ARKit+CoreLocation/Pods-ARKit+CoreLocation-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		9CE3F8FA71585F7964C43538 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -316,18 +393,64 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ARKit+CoreLocation/Pods-ARKit+CoreLocation-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-ARKit+CoreLocation/Pods-ARKit+CoreLocation-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/ARCL/ARCL.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/PINCache/PINCache.framework",
+				"${BUILT_PRODUCTS_DIR}/PINOperation/PINOperation.framework",
+				"${PODS_ROOT}/SnapSDK/SCSDKBitmojiKit.framework",
+				"${PODS_ROOT}/SnapSDK/SCSDKCoreKit.framework",
+				"${PODS_ROOT}/SnapSDK/SCSDKCreativeKit.framework",
+				"${PODS_ROOT}/SnapSDK/SCSDKLoginKit.framework",
+				"${BUILT_PRODUCTS_DIR}/VerticalCardSwiper/VerticalCardSwiper.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ARCL.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PINCache.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PINOperation.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SCSDKBitmojiKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SCSDKCoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SCSDKCreativeKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SCSDKLoginKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/VerticalCardSwiper.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ARKit+CoreLocation/Pods-ARKit+CoreLocation-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ARKit+CoreLocation/Pods-ARKit+CoreLocation-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BD2DE1FEF5D4F773E04939D5 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ARKit+CoreLocation-ARCLTests/Pods-ARKit+CoreLocation-ARCLTests-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseAuthUI.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebasePhoneAuthUI.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebaseAuthUI.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebasePhoneAuthUI.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ARKit+CoreLocation-ARCLTests/Pods-ARKit+CoreLocation-ARCLTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C224D3A38F464259B5D8D1FC /* [CP] Embed Pods Frameworks */ = {
@@ -338,18 +461,40 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ARKit+CoreLocation-ARCLTests/Pods-ARKit+CoreLocation-ARCLTests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-ARKit+CoreLocation-ARCLTests/Pods-ARKit+CoreLocation-ARCLTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/ARCL/ARCL.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/PINCache/PINCache.framework",
+				"${BUILT_PRODUCTS_DIR}/PINOperation/PINOperation.framework",
+				"${PODS_ROOT}/SnapSDK/SCSDKBitmojiKit.framework",
+				"${PODS_ROOT}/SnapSDK/SCSDKCoreKit.framework",
+				"${PODS_ROOT}/SnapSDK/SCSDKCreativeKit.framework",
+				"${PODS_ROOT}/SnapSDK/SCSDKLoginKit.framework",
+				"${BUILT_PRODUCTS_DIR}/VerticalCardSwiper/VerticalCardSwiper.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ARCL.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PINCache.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PINOperation.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SCSDKBitmojiKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SCSDKCoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SCSDKCreativeKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SCSDKLoginKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/VerticalCardSwiper.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ARKit+CoreLocation-ARCLTests/Pods-ARKit+CoreLocation-ARCLTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ARKit+CoreLocation-ARCLTests/Pods-ARKit+CoreLocation-ARCLTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F3C651027697D46CB173FF94 /* [CP] Check Pods Manifest.lock */ = {
@@ -383,12 +528,21 @@
 			files = (
 				12318E3D1F3B457200ACAD16 /* Utils.swift in Sources */,
 				49A3FBE01F09988100AA59C8 /* POIViewController.swift in Sources */,
+				FDDB35CF22CFB251009490A7 /* UIViewController.swift in Sources */,
+				FDDB35BE22CFAE44009490A7 /* LandingViewController.swift in Sources */,
 				369336F3221B4B730097D8FA /* NotSupportedViewController.swift in Sources */,
 				36B3F34B221D077700745096 /* SettingsViewController.swift in Sources */,
+				FDDB35CD22CFB251009490A7 /* UIColor.swift in Sources */,
+				FDDB35CE22CFB251009490A7 /* UIImage.swift in Sources */,
 				49A3FBDC1F09988100AA59C8 /* AppDelegate.swift in Sources */,
+				FD40866A22CBF6F1000E6F90 /* MatchlessMKMapItem.swift in Sources */,
 				3643DAED221E3390002BEAFC /* OpenARCell.swift in Sources */,
+				FDDB35C622CFB192009490A7 /* ATCWalkthroughViewController.swift in Sources */,
 				3643DAEF221E3840002BEAFC /* LocationCell.swift in Sources */,
+				FDDB35C022CFB0CE009490A7 /* ATCClassicWalkthroughViewController.swift in Sources */,
 				3643DAEB221E30C6002BEAFC /* UIButton+Designable.swift in Sources */,
+				FDDB35C222CFB123009490A7 /* ATCWalkthroughModel.swift in Sources */,
+				FDDB35C822CFB1F4009490A7 /* UserEntity.swift in Sources */,
 				36D99E3222BFEA2E00D09952 /* POIViewController+ARSCNViewDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -547,10 +701,11 @@
 			baseConfigurationReference = 8C31ACA439BC114F28F96BDD /* Pods-ARKit+CoreLocation.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 2AP39323FY;
 				INFOPLIST_FILE = "ARKit+CoreLocation/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.maaap.ProjectDent.ARKit-CoreLocation";
+				PRODUCT_BUNDLE_IDENTIFIER = co.matchless.get;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -562,10 +717,11 @@
 			baseConfigurationReference = CED01C5C93D16CD7C03711E5 /* Pods-ARKit+CoreLocation.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 2AP39323FY;
 				INFOPLIST_FILE = "ARKit+CoreLocation/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.maaap.ProjectDent.ARKit-CoreLocation";
+				PRODUCT_BUNDLE_IDENTIFIER = co.matchless.get;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

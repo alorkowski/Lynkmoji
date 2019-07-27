@@ -9,8 +9,9 @@
 import CoreLocation
 import MapKit
 import UIKit
+import VerticalCardSwiper
 
-class LocationCell: UITableViewCell {
+class LocationCell: CardCell {
 
     var locationManager: CLLocationManager?
     var locationUpdateTimer: Timer?
@@ -24,14 +25,15 @@ class LocationCell: UITableViewCell {
             updateCell()
         }
     }
-
+    
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
-
+    @IBOutlet weak var profileImageView: UIImageView!
+    
     override func prepareForReuse() {
         super.prepareForReuse()
-        distanceLabel.text = nil
-        titleLabel.text = nil
+//        distanceLabel.text = nil
+//        titleLabel.text = nil
         locationUpdateTimer?.invalidate()
     }
 
@@ -43,24 +45,28 @@ extension LocationCell {
 
     @objc
     func updateCell() {
-        guard let mapItem = mapItem else {
+        guard let mapItem = mapItem as? MatchlessMKMapItem else {
             locationUpdateTimer?.invalidate()
             return
         }
-        titleLabel.text = mapItem.titleLabelText
+//\       titleLabel.text = ""
 
         guard let currentLocation = currentLocation else {
-            distanceLabel.text = "📡"
+//            distanceLabel.text = "📡"
             return
         }
         guard let mapItemLocation = mapItem.placemark.location else {
-            distanceLabel.text = "🤷‍♂️"
+//            distanceLabel.text = "🤷‍♂️"
             return
         }
 
-        distanceLabel.text = String(format: "%.0f km", mapItemLocation.distance(from: currentLocation)/1000)
+//        distanceLabel.text = String(format: "%.0f m", mapItemLocation.distance(from: currentLocation))
 
         locationUpdateTimer = Timer(timeInterval: 1, target: self, selector: #selector(updateCell), userInfo: nil, repeats: false)
+        
+        profileImageView.image = mapItem.profileImage
+        
+        
     }
 
 }
@@ -83,9 +89,10 @@ private extension MKMapItem {
                 result += "\n\(city), \(state) \(zip)"
             }
         } else if let location = placemark.location {
-            result += "\n\(location.coordinate)"
+            result += "Some information about the user? Distance?"
+//            result += "\n\(location.coordinate)"
         }
-
+        
         return result
     }
 

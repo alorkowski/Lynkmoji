@@ -8,24 +8,44 @@
 
 import CoreLocation
 import MapKit
+import GeoFire
+import Firebase
+import FirebaseDatabase
+import FirebaseAuth
 import UIKit
+import VerticalCardSwiper
+import SCSDKLoginKit
+import FirebaseUI
 
 @available(iOS 11.0, *)
-class SettingsViewController: UIViewController {
-
+class SettingsViewController: UIViewController, VerticalCardSwiperDelegate, VerticalCardSwiperDatasource, FUIAuthDelegate {
+    
     @IBOutlet weak var showMapSwitch: UISwitch!
     @IBOutlet weak var showPointsOfInterest: UISwitch!
     @IBOutlet weak var showRouteDirections: UISwitch!
     @IBOutlet weak var addressText: UITextField!
     @IBOutlet weak var searchResultTable: UITableView!
     @IBOutlet weak var refreshControl: UIActivityIndicatorView!
+    
+    @IBOutlet private var cardSwiper: VerticalCardSwiper!
 
     var locationManager = CLLocationManager()
 
-    var mapSearchResults: [MKMapItem]?
+    var mapSearchResults = [MatchlessMKMapItem]()
+    
+    var selectedMapItem: MatchlessMKMapItem? = nil
+    var heldIndex: Int? = -1
+    
+    var geoFireRef: DatabaseReference?
+    var geoFire: GeoFire?
+    var myQuery: GFQuery?
+    
+    let authUI: FUIAuth? = FUIAuth.defaultAuthUI()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print("loaded")
 
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         locationManager.distanceFilter = kCLDistanceFilterNone
@@ -37,22 +57,119 @@ class SettingsViewController: UIViewController {
 
         locationManager.requestWhenInUseAuthorization()
 
-        addressText.delegate = self
+//        addressText.delegate = self
+        
+        geoFireRef = Database.database().reference().child("users")
+        geoFire = GeoFire(firebaseRef: geoFireRef!)
+        
+        cardSwiper.delegate = self
+        cardSwiper.datasource = self
+        
+        // register cardcell for storyboard use
+        cardSwiper.register(nib: UINib(nibName: "LocationCell", bundle: nil), forCellWithReuseIdentifier: "LocationCell")
+        // You need to adopt a FUIAuthDelegate protocol to receive callback
+        authUI!.delegate = self
+        
+        let providers: [FUIAuthProvider] = [
+            FUIPhoneAuth(authUI:FUIAuth.defaultAuthUI()!),
+        ]
+//        self.authUI.providers = providers
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: animated)
+    
+    private func isUserSignedIn() -> Bool {
+        guard Auth.auth().currentUser != nil else { return false }
+        return true
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    
+        let userLat = UserDefaults.standard.value(forKey: "current_latitude") as! String
+        let userLong = UserDefaults.standard.value(forKey: "current_longitude") as! String
+        
+        DispatchQueue.main.async {
+            let location:CLLocation = CLLocation(latitude: CLLocationDegrees(Double(userLat)!), longitude: CLLocationDegrees(Double(userLong)!))
+            self.geoFire?.setLocation(location, forKey: Auth.auth().currentUser!.uid)
+            self.searchForLocation()
+        }
+        
+       
+//        self.fetchSnapUserInfo({ (userEntity, error) in
+//
+//            if let userEntity = userEntity {
+//                DispatchQueue.main.async {
+//                    self.navigationController?.setNavigationBarHidden(true, animated: true)
+//
+//                }
+//            }
+//        })
+        
+        
+//        let phoneProvider = FUIAuth.defaultAuthUI()!.providers.first as! FUIPhoneAuth
+//        phoneProvider.signIn(withPresenting: self, phoneNumber: nil)
+    }
+    
+    private func showLoginView() {
+        if let authVC = FUIAuth.defaultAuthUI()?.authViewController() {
+            present(authVC, animated: true, completion: nil)
+        }
+    }
+    
+    func authUI(_ authUI: FUIAuth, didSignInWith authDataResult: AuthDataResult?, error: Error?) {
+        print("signed in")
+//        snapChatLogin()
+    }
+    
+    private func snapChatLogin() {
+        SCSDKLoginClient.login(from: self, completion: { success, error in
+            if let error = error {
+                print("error shit!")
+                print(error.localizedDescription)
+                return
+            }
+            print("here")
+            print("here")
+            if success {
+                self.fetchSnapUserInfo({ (userEntity, error) in
+                    if let userEntity = userEntity {
+                        self.searchForLocation()
+                    }
+                })
+            }
+        })
+    }
+    
+    private func fetchSnapUserInfo(_ completion: @escaping ((UserEntity?, Error?) -> ())){
+        let graphQLQuery = "{me{externalId, displayName, bitmoji{avatar}}}"
+        print("fetching")
+        SCSDKLoginClient
+            .fetchUserData(
+                withQuery: graphQLQuery,
+                variables: nil,
+                success: { userInfo in
+                    if let userInfo = userInfo,
+                        let data = try? JSONSerialization.data(withJSONObject: userInfo, options: .prettyPrinted),
+                        let userEntity = try? JSONDecoder().decode(UserEntity.self, from: data) {
+                        var dictionary = [String: String]()
+                        dictionary["bitmoji_url"] = userEntity.avatar
+                        dictionary["display_name"] = userEntity.displayName
+                        print("storing")
+                        self.geoFireRef?.child(Auth.auth().currentUser!.uid).child("snap_info").setValue(dictionary)
+                        completion(userEntity, nil)
+                    }
+            }) { (error, isUserLoggedOut) in
+                completion(nil, error)
+        }
     }
 
     @IBAction
     func toggledSwitch(_ sender: UISwitch) {
         if sender == showPointsOfInterest {
-            showRouteDirections.isOn = !sender.isOn
+//            showRouteDirections.isOn = !sender.isOn
             searchResultTable.reloadData()
         } else if sender == showRouteDirections {
-            showPointsOfInterest.isOn = !sender.isOn
-            searchResultTable.reloadData()
+//            showPointsOfInterest.isOn = !sender.isOn
+//            searchResultTable.reloadData()
         }
     }
 
@@ -83,72 +200,46 @@ extension SettingsViewController: UITextFieldDelegate {
 
 }
 
-// MARK: - DataSource
-
-@available(iOS 11.0, *)
-extension SettingsViewController: UITableViewDataSource {
-
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if showPointsOfInterest.isOn {
-            return 1
-        }
-        guard let mapSearchResults = mapSearchResults else {
-            return 0
-        }
-
-        return mapSearchResults.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if showPointsOfInterest.isOn {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "OpenARCell", for: indexPath)
-            guard let openARCell = cell as? OpenARCell else {
-                return cell
-            }
-            openARCell.parentVC = self
-
-            return openARCell
-        } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell", for: indexPath)
-            guard let mapSearchResults = mapSearchResults,
-                indexPath.row < mapSearchResults.count,
-                let locationCell = cell as? LocationCell else {
-                return cell
-            }
-            locationCell.locationManager = locationManager
-            locationCell.mapItem = mapSearchResults[indexPath.row]
-
-            return locationCell
-        }
-    }
-}
-
-// MARK: - UITableViewDelegate
-
-@available(iOS 11.0, *)
-extension SettingsViewController: UITableViewDelegate {
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let mapSearchResults = mapSearchResults, indexPath.row < mapSearchResults.count else {
-            return
-        }
-        let selectedMapItem = mapSearchResults[indexPath.row]
-        getDirections(to: selectedMapItem)
-    }
-
-}
-
 // MARK: - CLLocationManagerDelegate
 
 @available(iOS 11.0, *)
 extension SettingsViewController: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-
+        let updatedLocation: CLLocation = locations.first!
+        
+        let newCoordinate: CLLocationCoordinate2D = updatedLocation.coordinate
+        
+        let usrDefaults: UserDefaults = UserDefaults.standard
+        
+        usrDefaults.set("\(newCoordinate.latitude)", forKey: "current_latitude")
+        usrDefaults.set("\(newCoordinate.longitude)", forKey: "current_longitude")
+        usrDefaults.synchronize()
+    }
+    
+    func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        switch status {
+        case .notDetermined:
+            // If status has not yet been determied, ask for authorization
+            manager.requestWhenInUseAuthorization()
+            break
+        case .authorizedWhenInUse:
+            // If authorized when in use
+            manager.startUpdatingLocation()
+            break
+        case .authorizedAlways:
+            // If always authorized
+            manager.startUpdatingLocation()
+            break
+        case .restricted:
+            // If restricted by e.g. parental controls. User can't enable Location Services
+            break
+        case .denied:
+            // If user denied your app access to Location Services, but can grant access from Settings.app
+            break
+        default:
+            break
+        }
     }
 }
 
@@ -159,21 +250,23 @@ extension SettingsViewController {
 
     func createARVC() -> POIViewController {
         let arclVC = POIViewController.loadFromStoryboard()
-        arclVC.showMap = showMapSwitch.isOn
+        arclVC.showMap = true//showMapSwitch.isOn
 
         return arclVC
     }
 
-    func getDirections(to mapLocation: MKMapItem) {
+    func getDirections(to mapLocation: MatchlessMKMapItem) {
         refreshControl.startAnimating()
+        
+        print("getting directions")
 
         let request = MKDirections.Request()
         request.source = MKMapItem.forCurrentLocation()
         request.destination = mapLocation
-        request.requestsAlternateRoutes = false
+        request.requestsAlternateRoutes = true
 
         let directions = MKDirections(request: request)
-
+        
         directions.calculate(completionHandler: { response, error in
             defer {
                 DispatchQueue.main.async { [weak self] in
@@ -194,6 +287,8 @@ extension SettingsViewController {
 
                 let arclVC = self.createARVC()
                 arclVC.routes = response.routes
+                print(response.routes)
+                arclVC.memberMKMapItem = mapLocation
                 self.navigationController?.pushViewController(arclVC, animated: true)
             }
         })
@@ -201,42 +296,68 @@ extension SettingsViewController {
 
     /// Searches for the location that was entered into the address text
     func searchForLocation() {
-        guard let addressText = addressText.text, !addressText.isEmpty else {
-            return
+        print("search")
+        myQuery = geoFire?.query(at: CLLocation(coordinate: self.locationManager.location!.coordinate, altitude: 0.5), withRadius: 1000)
+
+        myQuery?.observe(.keyEntered, with: { (key, location) in
+            Database.database().reference().child("users").child(key).observe(.value, with: { (snapshot) in
+                let userDict = snapshot.value as? [String : AnyObject] ?? [:]
+                //                if (userDict["active"]! as! String != "false") {
+                let snap_info = userDict["snap_info"] as! [String : AnyObject]
+                
+                let destination = MatchlessMKMapItem(coordinate: location.coordinate, profileFileURL: snap_info["bitmoji_url"] as! String)
+                //                destination.name = "test"
+                self.mapSearchResults.append(destination)
+                self.cardSwiper.reloadData()
+                print("here")
+            })
+            //            self.resetARScene()
+        })
+    }
+    
+    func cardForItemAt(verticalCardSwiperView: VerticalCardSwiperView, cardForItemAt index: Int) -> CardCell {
+        
+        if let cardCell = verticalCardSwiperView.dequeueReusableCell(withReuseIdentifier: "LocationCell", for: index) as? LocationCell {
+            
+            cardCell.locationManager = locationManager
+            cardCell.mapItem = mapSearchResults[index]
+            return cardCell
         }
-
-        showRouteDirections.isOn = true
-        toggledSwitch(showRouteDirections)
-
-        refreshControl.startAnimating()
-        defer {
-            self.addressText.resignFirstResponder()
+        return CardCell()
+    }
+    
+    func numberOfCards(verticalCardSwiperView: VerticalCardSwiperView) -> Int {
+        return mapSearchResults.count
+    }
+    
+    func willSwipeCardAway(card: CardCell, index: Int, swipeDirection: SwipeDirection) {
+        // called right before the card animates off the screen.
+        
+    }
+    
+    func didSwipeCardAway(card: CardCell, index: Int, swipeDirection: SwipeDirection) {
+       
+//        if swipeDirection == .Right {
+//            selectedMapItem = mapSearchResults[index] as MatchlessMKMapItem
+//            getDirections(to: selectedMapItem!)
+//        }
+        mapSearchResults.remove(at: index)
+    }
+    
+    func didTapCard(verticalCardSwiperView: VerticalCardSwiperView, index: Int) {
+        if heldIndex != index {
+            heldIndex = index
+            selectedMapItem = mapSearchResults[index] as MatchlessMKMapItem
+            getDirections(to: selectedMapItem!)
         }
-
-        let request = MKLocalSearch.Request()
-        request.naturalLanguageQuery = addressText
-
-        let search = MKLocalSearch(request: request)
-        search.start { response, error in
-            defer {
-                DispatchQueue.main.async { [weak self] in
-                    self?.refreshControl.stopAnimating()
-                }
-            }
-            if let error = error {
-                return assertionFailure("Error searching for \(addressText): \(error.localizedDescription)")
-            }
-            guard let response = response, response.mapItems.count > 0 else {
-                return assertionFailure("No response or empty response")
-            }
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else {
-                    return
-                }
-                self.mapSearchResults = response.sortedMapItems(byDistanceFrom: self.locationManager.location)
-                self.searchResultTable.reloadData()
-            }
-        }
+    }
+    
+    func didHoldCard(verticalCardSwiperView: VerticalCardSwiperView, index: Int, state: UIGestureRecognizer.State) {
+//        if heldIndex != index {
+//            heldIndex = index
+//            selectedMapItem = mapSearchResults[index] as MatchlessMKMapItem
+//            getDirections(to: selectedMapItem!)
+//        }
     }
 }
 
@@ -256,5 +377,4 @@ extension MKLocalSearch.Response {
             return d1 < d2
         }
     }
-
 }
