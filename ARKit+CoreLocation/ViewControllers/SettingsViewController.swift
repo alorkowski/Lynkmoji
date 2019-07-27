@@ -17,6 +17,11 @@ import VerticalCardSwiper
 import SCSDKLoginKit
 import FirebaseUI
 
+enum LocationSearchStatus {
+    case active
+    case off
+}
+
 @available(iOS 11.0, *)
 class SettingsViewController: UIViewController, FUIAuthDelegate {
     @IBOutlet weak var showMapSwitch: UISwitch!
@@ -27,7 +32,7 @@ class SettingsViewController: UIViewController, FUIAuthDelegate {
     @IBOutlet weak var refreshControl: UIActivityIndicatorView!
     @IBOutlet private var cardSwiper: VerticalCardSwiper!
 
-    var locationManager = CLLocationManager()
+    let locationManager = CLLocationManager()
     var mapSearchResults = [MatchlessMKMapItem]()
     var selectedMapItem: MatchlessMKMapItem?
     var heldIndex: Int? = -1
@@ -35,19 +40,18 @@ class SettingsViewController: UIViewController, FUIAuthDelegate {
     var geoFire: GeoFire?
     var myQuery: GFQuery?
     let authUI: FUIAuth? = FUIAuth.defaultAuthUI()
+    var locationSearchStatus = LocationSearchStatus.active
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        locationManager.requestWhenInUseAuthorization()
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         locationManager.distanceFilter = kCLDistanceFilterNone
         locationManager.headingFilter = kCLHeadingFilterNone
         locationManager.pausesLocationUpdatesAutomatically = false
         locationManager.delegate = self
-        locationManager.startUpdatingHeading()
-        locationManager.startUpdatingLocation()
-        locationManager.requestWhenInUseAuthorization()
 
-        //addressText.delegate = self
+        // addressText.delegate = self
 
         geoFireRef = Database.database().reference().child("users")
         geoFire = GeoFire(firebaseRef: geoFireRef!)
@@ -61,7 +65,7 @@ class SettingsViewController: UIViewController, FUIAuthDelegate {
         authUI!.delegate = self
 
         let providers: [FUIAuthProvider] = [
-            FUIPhoneAuth(authUI:FUIAuth.defaultAuthUI()!),
+            FUIPhoneAuth(authUI: FUIAuth.defaultAuthUI()!),
         ]
         //self.authUI.providers = providers
     }
@@ -73,20 +77,9 @@ class SettingsViewController: UIViewController, FUIAuthDelegate {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
-        // TODO: Consider not storing user location in persistent storage
-        // swiftlint:disable:next force_cast
-        let userLat = UserDefaults.standard.value(forKey: "current_latitude") as! String
-        // swiftlint:disable:next force_cast
-        let userLong = UserDefaults.standard.value(forKey: "current_longitude") as! String
-
-        DispatchQueue.main.async {
-            // TODO: Remove force unwrap
-            let location: CLLocation = CLLocation(latitude: CLLocationDegrees(Double(userLat)!),
-                                                  longitude: CLLocationDegrees(Double(userLong)!))
-            self.geoFire?.setLocation(location, forKey: Auth.auth().currentUser!.uid)
-            self.searchForLocation()
-        }
+        locationSearchStatus = .active
+        locationManager.startUpdatingHeading()
+        locationManager.startUpdatingLocation()
 
         //self.fetchSnapUserInfo({ (userEntity, error) in
         //
@@ -100,6 +93,12 @@ class SettingsViewController: UIViewController, FUIAuthDelegate {
 
         //let phoneProvider = FUIAuth.defaultAuthUI()!.providers.first as! FUIPhoneAuth
         //phoneProvider.signIn(withPresenting: self, phoneNumber: nil)
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        locationManager.stopUpdatingLocation()
+        locationManager.stopUpdatingHeading()
     }
 
     private func showLoginView() {
@@ -188,15 +187,20 @@ extension SettingsViewController: UITextFieldDelegate {
 @available(iOS 11.0, *)
 extension SettingsViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let updatedLocation: CLLocation = locations.first!
-        let newCoordinate: CLLocationCoordinate2D = updatedLocation.coordinate
-        let userDefaults: UserDefaults = UserDefaults.standard
-        userDefaults.set("\(newCoordinate.latitude)", forKey: "current_latitude")
-        userDefaults.set("\(newCoordinate.longitude)", forKey: "current_longitude")
-        userDefaults.synchronize()
+        guard case LocationSearchStatus.active = locationSearchStatus,
+            let location = locations.first else { return }
+
+        DispatchQueue.main.async {
+            let location: CLLocation = CLLocation(latitude: CLLocationDegrees(location.coordinate.latitude),
+                                                  longitude: CLLocationDegrees(location.coordinate.longitude))
+            self.geoFire?.setLocation(location, forKey: Auth.auth().currentUser!.uid)
+            self.searchForLocation()
+        }
+
+        locationSearchStatus = .off
     }
 
-    func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
         case .notDetermined:
             // If status has not yet been determied, ask for authorization

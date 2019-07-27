@@ -23,5 +23,4 @@ extension POIViewController: ARSCNViewDelegate {
     func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
         print("Camera: \(camera)")
     }
-
 }
