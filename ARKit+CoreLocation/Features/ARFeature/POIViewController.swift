@@ -54,7 +54,6 @@ class POIViewController: UIViewController {
     class func loadFromStoryboard() -> POIViewController {
         return UIStoryboard(name: "Main", bundle: nil)
             .instantiateViewController(withIdentifier: "ARCLViewController") as! POIViewController
-        // swiftlint:disable:previous force_cast
     }
 
     override func viewDidLoad() {
@@ -168,7 +167,6 @@ class POIViewController: UIViewController {
 // MARK: - MKMapViewDelegate
 @available(iOS 11.0, *)
 extension POIViewController: MKMapViewDelegate {
-
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let renderer = MKPolylineRenderer(overlay: overlay)
         renderer.lineWidth = 3
@@ -201,7 +199,6 @@ extension POIViewController: MKMapViewDelegate {
 
 @available(iOS 11.0, *)
 extension POIViewController {
-
     /// Adds the appropriate ARKit models to the scene.  Note: that this won't
     /// do anything until the scene has a `currentLocation`.  It "polls" on that
     /// and when a location is finally discovered, the models are added.
@@ -214,7 +211,6 @@ extension POIViewController {
             return
         }
 
-        print("adding scene models")
         //print(routes)
         //
         //var box = SCNBox(width: 1, height: 0.2, length: 5, chamferRadius: 0.25)

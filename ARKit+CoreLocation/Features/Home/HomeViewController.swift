@@ -189,6 +189,7 @@ extension HomeViewController: CLLocationManagerDelegate {
     }
 }
 
+// MARK: - VerticalCardSwiperDatasource
 extension HomeViewController: VerticalCardSwiperDatasource {
     func cardForItemAt(verticalCardSwiperView: VerticalCardSwiperView,
                        cardForItemAt index: Int) -> CardCell {
@@ -203,6 +204,7 @@ extension HomeViewController: VerticalCardSwiperDatasource {
     }
 }
 
+// MARK: - VerticalCardSwiperDelegate
 extension HomeViewController: VerticalCardSwiperDelegate {
     func didSwipeCardAway(card: CardCell, index: Int, swipeDirection: SwipeDirection) {
         homeViewModel.mapSearchResults.remove(at: index)
