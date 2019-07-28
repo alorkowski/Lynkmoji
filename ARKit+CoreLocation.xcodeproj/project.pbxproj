@@ -173,9 +173,9 @@
 		7308209122ECE54B005B3504 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				3643DAEC221E3390002BEAFC /* OpenARCell.swift */,
 				3643DAEE221E3840002BEAFC /* LocationCell.swift */,
 				FD40868C22CE78B2000E6F90 /* LocationCell.xib */,
+				3643DAEC221E3390002BEAFC /* OpenARCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -183,15 +183,15 @@
 		7308209222ECE5A1005B3504 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				49A3FBDF1F09988100AA59C8 /* POIViewController.swift */,
-				36B3F34A221D077700745096 /* SettingsViewController.swift */,
-				D8C205D01F5B197200675E6E /* NotSupportedViewController.swift */,
-				36D99E3122BFEA2E00D09952 /* POIViewController+ARSCNViewDelegate.swift */,
-				FDDB35BD22CFAE44009490A7 /* LandingViewController.swift */,
 				FDDB35BF22CFB0CE009490A7 /* ATCClassicWalkthroughViewController.swift */,
 				FDDB35C322CFB153009490A7 /* ATCClassicWalkthroughViewController.xib */,
 				FDDB35C522CFB192009490A7 /* ATCWalkthroughViewController.swift */,
 				FDDB35D022CFB3D4009490A7 /* ATCWalkthroughViewController.xib */,
+				FDDB35BD22CFAE44009490A7 /* LandingViewController.swift */,
+				D8C205D01F5B197200675E6E /* NotSupportedViewController.swift */,
+				49A3FBDF1F09988100AA59C8 /* POIViewController.swift */,
+				36D99E3122BFEA2E00D09952 /* POIViewController+ARSCNViewDelegate.swift */,
+				36B3F34A221D077700745096 /* SettingsViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";

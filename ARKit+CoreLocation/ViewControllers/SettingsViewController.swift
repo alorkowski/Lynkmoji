@@ -42,6 +42,10 @@ class SettingsViewController: UIViewController, FUIAuthDelegate {
     let authUI: FUIAuth? = FUIAuth.defaultAuthUI()
     var locationSearchStatus = LocationSearchStatus.active
 
+    private var isUserSignedIn: Bool {
+        return Auth.auth().currentUser != nil
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         locationManager.requestWhenInUseAuthorization()
@@ -61,35 +65,30 @@ class SettingsViewController: UIViewController, FUIAuthDelegate {
         // register cardcell for storyboard use
         cardSwiper.register(nib: UINib(nibName: "LocationCell", bundle: nil),
                             forCellWithReuseIdentifier: "LocationCell")
+
         // You need to adopt a FUIAuthDelegate protocol to receive callback
-        authUI!.delegate = self
+        authUI?.delegate = self
 
-        let providers: [FUIAuthProvider] = [
-            FUIPhoneAuth(authUI: FUIAuth.defaultAuthUI()!),
-        ]
-        //self.authUI.providers = providers
-    }
-
-    private func isUserSignedIn() -> Bool {
-        guard Auth.auth().currentUser != nil else { return false }
-        return true
+        let providers = [FUIPhoneAuth(authUI: FUIAuth.defaultAuthUI()!)]
+        self.authUI?.providers = providers
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        guard isUserSignedIn else {
+            showLoginView()
+            return
+        }
         locationSearchStatus = .active
         locationManager.startUpdatingHeading()
         locationManager.startUpdatingLocation()
 
-        //self.fetchSnapUserInfo({ (userEntity, error) in
-        //
-        //if let userEntity = userEntity {
-        //DispatchQueue.main.async {
-        //self.navigationController?.setNavigationBarHidden(true, animated: true)
-        //
-        //}
-        //}
-        //})
+        self.fetchSnapUserInfo({ (userEntity, error) in
+            guard userEntity != nil else { return }
+            DispatchQueue.main.async {
+                self.navigationController?.setNavigationBarHidden(true, animated: true)
+            }
+        })
 
         //let phoneProvider = FUIAuth.defaultAuthUI()!.providers.first as! FUIPhoneAuth
         //phoneProvider.signIn(withPresenting: self, phoneNumber: nil)
@@ -188,12 +187,13 @@ extension SettingsViewController: UITextFieldDelegate {
 extension SettingsViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard case LocationSearchStatus.active = locationSearchStatus,
+            let currentUser = Auth.auth().currentUser,
             let location = locations.first else { return }
 
         DispatchQueue.main.async {
             let location: CLLocation = CLLocation(latitude: CLLocationDegrees(location.coordinate.latitude),
                                                   longitude: CLLocationDegrees(location.coordinate.longitude))
-            self.geoFire?.setLocation(location, forKey: Auth.auth().currentUser!.uid)
+            self.geoFire?.setLocation(location, forKey: currentUser.uid)
             self.searchForLocation()
         }
 
@@ -258,10 +258,7 @@ extension SettingsViewController {
             }
 
             DispatchQueue.main.async { [weak self] in
-                guard let self = self else {
-                    return
-                }
-
+                guard let `self` = self else { return }
                 let arclVC = self.createARVC()
                 arclVC.routes = response.routes
                 print(response.routes)
@@ -289,7 +286,6 @@ extension SettingsViewController {
                 //destination.name = "test"
                 self.mapSearchResults.append(destination)
                 self.cardSwiper.reloadData()
-                print("here")
             })
             //self.resetARScene()
         })
@@ -298,10 +294,7 @@ extension SettingsViewController {
 
 extension MKLocalSearch.Response {
     func sortedMapItems(byDistanceFrom location: CLLocation?) -> [MKMapItem] {
-        guard let location = location else {
-            return mapItems
-        }
-
+        guard let location = location else { return mapItems }
         return mapItems.sorted { (first, second) -> Bool in
             guard let d1 = first.placemark.location?.distance(from: location),
                 let d2 = second.placemark.location?.distance(from: location) else {

@@ -36,7 +36,7 @@ class LandingViewController: UIViewController, ATCWalkthroughViewControllerDeleg
         super.viewDidAppear(animated)
         geoFireRef = Database.database().reference().child("users")
         geoFire = GeoFire(firebaseRef: geoFireRef!)
-        if isUserSignedIn() { // TODO: fetchSnapUserInfo is defined and also called in SettingsViewController
+        if isUserSignedIn { // TODO: fetchSnapUserInfo is defined and also called in SettingsViewController
             self.fetchSnapUserInfo({ (userEntity, _) in
                 guard userEntity != nil else { return }
                 DispatchQueue.main.async {
@@ -78,9 +78,8 @@ class LandingViewController: UIViewController, ATCWalkthroughViewControllerDeleg
         )
     }
 
-    private func isUserSignedIn() -> Bool {
-        guard Auth.auth().currentUser != nil else { return false }
-        return true
+    private var isUserSignedIn: Bool {
+        return Auth.auth().currentUser != nil
     }
 
     func walkthroughViewControllerDidFinishFlow(_ vc: ATCWalkthroughViewController) {
