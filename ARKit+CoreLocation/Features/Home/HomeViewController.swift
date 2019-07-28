@@ -54,7 +54,8 @@ class HomeViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         guard homeViewModel.isUserSignedIn else {
-            showLoginView()
+//            showLoginView()
+            homeViewModel.snapChatLogin(from: self)
             return
         }
         homeViewModel.locationSearchStatus = .active
