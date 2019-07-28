@@ -30,7 +30,7 @@ class ATCClassicWalkthroughViewController: UIViewController {
     private func goToSettingsViewController() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         // swiftlint:disable:next force_cast
-        let vc = storyboard.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
+        let vc = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController
         present(UINavigationController(rootViewController: vc), animated: true, completion: nil)
     }
 

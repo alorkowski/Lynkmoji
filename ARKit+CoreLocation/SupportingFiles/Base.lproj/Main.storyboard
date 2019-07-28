@@ -71,7 +71,7 @@
         <!--Settings View Controller-->
         <scene sceneID="1Lv-Ig-nJX">
             <objects>
-                <viewController storyboardIdentifier="SettingsViewController" id="4lj-wh-bN2" customClass="SettingsViewController" customModule="ARKit_CoreLocation" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SettingsViewController" id="4lj-wh-bN2" customClass="SettingsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="rcG-rn-MFF">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -134,10 +134,10 @@
             </objects>
             <point key="canvasLocation" x="-581" y="-44"/>
         </scene>
-        <!--Settings View Controller-->
+        <!--Home View Controller-->
         <scene sceneID="khW-Hn-U8V">
             <objects>
-                <viewController id="VuW-iI-G0T" customClass="SettingsViewController" customModule="ARKit_CoreLocation" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HomeViewController" id="VuW-iI-G0T" customClass="HomeViewController" customModule="ARKit_CoreLocation" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="aPm-eF-7zl">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

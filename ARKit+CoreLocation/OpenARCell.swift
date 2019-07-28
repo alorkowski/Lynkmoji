@@ -11,7 +11,7 @@ import UIKit
 @available(iOS 11.0, *)
 class OpenARCell: UITableViewCell {
 
-    weak var parentVC: SettingsViewController?
+    weak var parentVC: HomeViewController?
     @IBOutlet weak var openARButton: UIButton!
 
     @IBAction

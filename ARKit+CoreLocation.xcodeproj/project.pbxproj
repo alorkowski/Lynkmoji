@@ -14,13 +14,17 @@
 		3643DAED221E3390002BEAFC /* OpenARCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3643DAEC221E3390002BEAFC /* OpenARCell.swift */; };
 		3643DAEF221E3840002BEAFC /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3643DAEE221E3840002BEAFC /* LocationCell.swift */; };
 		369336F3221B4B730097D8FA /* NotSupportedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C205D01F5B197200675E6E /* NotSupportedViewController.swift */; };
-		36B3F34B221D077700745096 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B3F34A221D077700745096 /* SettingsViewController.swift */; };
+		36B3F34B221D077700745096 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B3F34A221D077700745096 /* HomeViewController.swift */; };
 		36D99E3222BFEA2E00D09952 /* POIViewController+ARSCNViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D99E3122BFEA2E00D09952 /* POIViewController+ARSCNViewDelegate.swift */; };
 		49A3FBDC1F09988100AA59C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A3FBDB1F09988100AA59C8 /* AppDelegate.swift */; };
 		49A3FBE01F09988100AA59C8 /* POIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A3FBDF1F09988100AA59C8 /* POIViewController.swift */; };
 		49A3FBE51F09988100AA59C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49A3FBE41F09988100AA59C8 /* Assets.xcassets */; };
 		49A3FBE81F09988100AA59C8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49A3FBE61F09988100AA59C8 /* LaunchScreen.storyboard */; };
 		580A603392EEF4589D68F428 /* Pods_ARKit_CoreLocation_ARCLTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE4378FAA43D764F4F6D0513 /* Pods_ARKit_CoreLocation_ARCLTests.framework */; };
+		7308209D22ED68FE005B3504 /* LandingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7308209C22ED68FE005B3504 /* LandingViewModel.swift */; };
+		730820A022ED6DF6005B3504 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7308209F22ED6DF6005B3504 /* LoginViewController.swift */; };
+		730820A622ED8B97005B3504 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730820A522ED8B97005B3504 /* SettingsViewController.swift */; };
+		730820A822ED8D1F005B3504 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730820A722ED8D1F005B3504 /* HomeViewModel.swift */; };
 		932EF23220BE7E6E0052210C /* ARCLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932EF23120BE7E6E0052210C /* ARCLTests.swift */; };
 		FD40866A22CBF6F1000E6F90 /* MatchlessMKMapItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD40866922CBF6F1000E6F90 /* MatchlessMKMapItem.swift */; };
 		FD40868D22CE78B2000E6F90 /* LocationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD40868C22CE78B2000E6F90 /* LocationCell.xib */; };
@@ -57,7 +61,7 @@
 		36A77FB922BFD9B000AAE2A5 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 		36A77FBA22BFD9B000AAE2A5 /* changelog.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = changelog.md; sourceTree = "<group>"; };
 		36A77FBB22BFD9B000AAE2A5 /* readme.jp.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = readme.jp.md; sourceTree = "<group>"; };
-		36B3F34A221D077700745096 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		36B3F34A221D077700745096 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		36D99E3122BFEA2E00D09952 /* POIViewController+ARSCNViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "POIViewController+ARSCNViewDelegate.swift"; sourceTree = "<group>"; };
 		49A3FBD81F09988100AA59C8 /* ARKit+CoreLocation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ARKit+CoreLocation.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		49A3FBDB1F09988100AA59C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -66,6 +70,10 @@
 		49A3FBE71F09988100AA59C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		49A3FBE91F09988100AA59C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C10523EF85AA6B7CDF962AD /* Pods_ARKit_CoreLocation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARKit_CoreLocation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7308209C22ED68FE005B3504 /* LandingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingViewModel.swift; sourceTree = "<group>"; };
+		7308209F22ED6DF6005B3504 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		730820A522ED8B97005B3504 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		730820A722ED8D1F005B3504 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		8C31ACA439BC114F28F96BDD /* Pods-ARKit+CoreLocation.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARKit+CoreLocation.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ARKit+CoreLocation/Pods-ARKit+CoreLocation.debug.xcconfig"; sourceTree = "<group>"; };
 		932EF22A20BE7E6E0052210C /* ARCLTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ARCLTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		932EF23120BE7E6E0052210C /* ARCLTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCLTests.swift; sourceTree = "<group>"; };
@@ -193,9 +201,11 @@
 			isa = PBXGroup;
 			children = (
 				7308209B22ED65E6005B3504 /* AppEntry */,
-				7308209822ED6577005B3504 /* Settings */,
 				7308209722ED6546005B3504 /* ARFeature */,
+				730820A222ED6E49005B3504 /* Home */,
+				730820A122ED6E0B005B3504 /* Login */,
 				7308209622ED650F005B3504 /* Onboarding */,
+				7308209822ED6577005B3504 /* Settings */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -224,9 +234,7 @@
 		7308209822ED6577005B3504 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				36B3F34A221D077700745096 /* SettingsViewController.swift */,
-				7308209922ED6594005B3504 /* Cells */,
-				7308209322ECE5CF005B3504 /* Models */,
+				730820A522ED8B97005B3504 /* SettingsViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -253,8 +261,44 @@
 			children = (
 				FDDB35BD22CFAE44009490A7 /* LandingViewController.swift */,
 				D8C205D01F5B197200675E6E /* NotSupportedViewController.swift */,
+				7308209E22ED6905005B3504 /* ViewModels */,
 			);
 			path = AppEntry;
+			sourceTree = "<group>";
+		};
+		7308209E22ED6905005B3504 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				7308209C22ED68FE005B3504 /* LandingViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		730820A122ED6E0B005B3504 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				7308209F22ED6DF6005B3504 /* LoginViewController.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		730820A222ED6E49005B3504 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				36B3F34A221D077700745096 /* HomeViewController.swift */,
+				7308209922ED6594005B3504 /* Cells */,
+				7308209322ECE5CF005B3504 /* Models */,
+				730820A922ED9276005B3504 /* ViewModels */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		730820A922ED9276005B3504 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				730820A722ED8D1F005B3504 /* HomeViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		932EF23020BE7E6E0052210C /* ARCLTests */ = {
@@ -599,12 +643,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				12318E3D1F3B457200ACAD16 /* Utils.swift in Sources */,
+				730820A822ED8D1F005B3504 /* HomeViewModel.swift in Sources */,
 				49A3FBE01F09988100AA59C8 /* POIViewController.swift in Sources */,
+				730820A622ED8B97005B3504 /* SettingsViewController.swift in Sources */,
 				FDDB35CF22CFB251009490A7 /* UIViewController.swift in Sources */,
 				FDDB35BE22CFAE44009490A7 /* LandingViewController.swift in Sources */,
+				7308209D22ED68FE005B3504 /* LandingViewModel.swift in Sources */,
 				369336F3221B4B730097D8FA /* NotSupportedViewController.swift in Sources */,
-				36B3F34B221D077700745096 /* SettingsViewController.swift in Sources */,
+				36B3F34B221D077700745096 /* HomeViewController.swift in Sources */,
 				FDDB35CD22CFB251009490A7 /* UIColor.swift in Sources */,
+				730820A022ED6DF6005B3504 /* LoginViewController.swift in Sources */,
 				FDDB35CE22CFB251009490A7 /* UIImage.swift in Sources */,
 				49A3FBDC1F09988100AA59C8 /* AppDelegate.swift in Sources */,
 				FD40866A22CBF6F1000E6F90 /* MatchlessMKMapItem.swift in Sources */,

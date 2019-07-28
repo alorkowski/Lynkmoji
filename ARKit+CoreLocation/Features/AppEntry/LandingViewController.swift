@@ -7,42 +7,21 @@
 //
 
 import UIKit
-import FirebaseAuth
-import SCSDKLoginKit
-import Firebase
-import FirebaseDatabase
-import GeoFire
 
 class LandingViewController: UIViewController, ATCWalkthroughViewControllerDelegate {
-    var geoFireRef: DatabaseReference?
-    var geoFire: GeoFire?
-    let walkthroughs = [
-        ATCWalkthroughModel(title: "Welcome to Matchless",
-                            subtitle: "Offline Dating",
-                            icon: "activity-feed-icon"),
-        ATCWalkthroughModel(title: "No Swiping",
-                            subtitle: "See all your matches in real-time by scanning a user in front of you",
-                            icon: "analytics-icon"),
-        ATCWalkthroughModel(title: "Verificaton",
-                            subtitle: "Everyone is verified for safety. Yes, this is anonymous, and we will keep you protected",
-                            icon: "bars-icon"),
-        ATCWalkthroughModel(title: "Get Notified",
-                            subtitle: "Receive notifications when people that are nearby and want to match.",
-                            icon: "bell-icon")
-    ]
+    // MARK: - Stored Properties
+    let landingViewModel = LandingViewModel()
 
     // TODO: Do we have to do this every time the screen appears? Seems safer to call viewDidLoad()
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        geoFireRef = Database.database().reference().child("users")
-        geoFire = GeoFire(firebaseRef: geoFireRef!)
-        if isUserSignedIn { // TODO: fetchSnapUserInfo is defined and also called in SettingsViewController
-            self.fetchSnapUserInfo({ (userEntity, _) in
+        landingViewModel.setupGeoFire()
+        if landingViewModel.isUserSignedIn {
+            landingViewModel.fetchSnapUserInfo({ (userEntity, _) in
                 guard userEntity != nil else { return }
                 DispatchQueue.main.async {
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    // swiftlint:disable:next force_cast
-                    let vc = storyboard.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
+                    guard let vc = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController else { return }
                     self.present(UINavigationController(rootViewController: vc), animated: true, completion: nil)
                 }
             })
@@ -55,46 +34,23 @@ class LandingViewController: UIViewController, ATCWalkthroughViewControllerDeleg
         }
     }
 
-    private func fetchSnapUserInfo(_ completion: @escaping ((UserEntity?, Error?) -> Void)) {
-        let graphQLQuery = "{me{externalId, displayName, bitmoji{avatar}}}"
-        print("fetching")
-        SCSDKLoginClient
-            .fetchUserData(
-                withQuery: graphQLQuery,
-                variables: nil,
-                success: { userInfo in
-                    if let userInfo = userInfo,
-                        let data = try? JSONSerialization.data(withJSONObject: userInfo, options: .prettyPrinted),
-                        let userEntity = try? JSONDecoder().decode(UserEntity.self, from: data) {
-                        var dictionary = [String: String]()
-                        dictionary["bitmoji_url"] = userEntity.avatar
-                        dictionary["display_name"] = userEntity.displayName
-                        print("storing")
-                        self.geoFireRef?.child(Auth.auth().currentUser!.uid).child("snap_info").setValue(dictionary)
-                        completion(userEntity, nil)
-                    }},
-                failure: { (error, _) in
-                    completion(nil, error) }
-        )
-    }
-
-    private var isUserSignedIn: Bool {
-        return Auth.auth().currentUser != nil
-    }
-
     func walkthroughViewControllerDidFinishFlow(_ vc: ATCWalkthroughViewController) {
-        UIView.transition(with: self.view, duration: 1, options: .transitionFlipFromLeft, animations: {
-            vc.view.removeFromSuperview()
+        let walkthroughAnimation: (() -> Void)? = {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let appDelegate = UIApplication.shared.delegate as? AppDelegate
-            // swiftlint:disable:next force_cast
-            let vc = storyboard.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
+            let vc = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController
             appDelegate?.window?.rootViewController = vc
-        }, completion: nil)
+        }
+
+        UIView.transition(with: self.view,
+                          duration: 1,
+                          options: .transitionFlipFromLeft,
+                          animations: walkthroughAnimation,
+                          completion: nil)
     }
 
     fileprivate func walkthroughVC() -> ATCWalkthroughViewController {
-        let viewControllers = walkthroughs
+        let viewControllers = landingViewModel.walkthroughs
             .map { ATCClassicWalkthroughViewController(model: $0,
                                                        nibName: "ATCClassicWalkthroughViewController",
                                                        bundle: nil) }
