@@ -38,6 +38,7 @@ class HomeViewModel {
         return Auth.auth().currentUser != nil
     }
 
+    // MARK: - Initializers
     init() {
         geoFireRef = Database.database().reference().child("users")
         geoFire = GeoFire(firebaseRef: geoFireRef!)

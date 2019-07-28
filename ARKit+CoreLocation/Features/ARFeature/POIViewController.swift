@@ -54,6 +54,7 @@ class POIViewController: UIViewController {
     class func loadFromStoryboard() -> POIViewController {
         return UIStoryboard(name: "Main", bundle: nil)
             .instantiateViewController(withIdentifier: "ARCLViewController") as! POIViewController
+        // swiftlint:disable:previous force_cast
     }
 
     override func viewDidLoad() {
@@ -127,7 +128,6 @@ class POIViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        print("pause")
         // Pause the view's session
         sceneLocationView.pause()
     }

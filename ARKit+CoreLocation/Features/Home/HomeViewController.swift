@@ -92,8 +92,7 @@ class HomeViewController: UIViewController {
 // MARK: - FUIAuthDelegate
 extension HomeViewController: FUIAuthDelegate {
     func authUI(_ authUI: FUIAuth, didSignInWith authDataResult: AuthDataResult?, error: Error?) {
-        print("signed in")
-        //snapChatLogin()
+        homeViewModel.snapChatLogin(from: self)
     }
 
     private func showLoginView() {
